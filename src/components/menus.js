@@ -4,56 +4,59 @@ const menus = [{
         path: '/',
         icon: 'fa fa-dashboard'
     },
-    {
-        id: 'manage',
-        icon: 'fa fa-paper-plane',
-        label: '业务管理',
-        submenu: [{
-            id: 'order',
-            name: 'order',
-            label: '用户订单管理',
+    // {
+    //     id: 'manage',
+    //     icon: 'fa fa-paper-plane',
+    //     label: '机票管理',
+    //     submenu: [{
+    //         id: 'order',
+    //         name: 'order',
+    //         label: '机票订单',
 
-        }, {
-            id: 'qrcodeorder',
-            name: 'qrcodeorder',
-            label: '二维码订单管理',
+    //     }, {
+    //         id: 'qrcodeorder',
+    //         name: 'qrcodeorder',
+    //         label: '改签管理',
 
-        }, {
-            id: 'agentorder',
-            name: 'agentorder',
-            label: '商户订单管理',
+    //     }, {
+    //         id: 'agentorder',
+    //         name: 'agentorder',
+    //         label: '退票管理',
 
-        }]
-    },
+    //     }]
+    // },
+    // {
+    //     id: 'user',
+    //     icon: 'fa fa-users',
+    //     label: '企业管理',
+    //     submenu: [{
+    //         id: 'userlist',
+    //         name: 'userlist',
+    //         label: '企业管理',
+
+    //     }]
+    // },
+    // {
+    //     id: 'user',
+    //     icon: 'fa fa-users',
+    //     label: '报表管理',
+    //     submenu: [{
+    //         id: 'userlist',
+    //         name: 'userlist',
+    //         label: '报表管理',
+
+    //     }]
+    // },
     {
         id: 'user',
         icon: 'fa fa-users',
-        label: '用户管理',
+        label: '系统管理',
         submenu: [{
-                id: 'userlist',
-                name: 'userlist',
-                label: '用户管理',
+            id: 'backgrounduser',
+            name: 'backgrounduser',
+            label: '用户管理',
 
-            },
-            {
-                id: 'agentlist',
-                name: 'agentlist',
-                label: '商户管理',
-
-            },
-            {
-                id: 'problem',
-                name: 'problem',
-                label: '常见问题',
-
-            },
-            {
-                id: 'advice',
-                name: 'advice',
-                label: '用户留言',
-
-            }
-        ]
+        }]
     },
     // {
     //     id: 'components',

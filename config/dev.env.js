@@ -8,5 +8,5 @@ module.exports = {
     AES_KEY: '"aaaazzzzoooommmm"',
     Agent_ID: '"100003"',
     USER_KEY: '"823C2561D42946B98CE8652614C43FED"',
-    BASE_URL: '"http://localhost:7002"'
+    BASE_URL: '"http://localhost:8002"'
 }

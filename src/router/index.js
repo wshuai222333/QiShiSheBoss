@@ -11,6 +11,8 @@ const page = name => () =>
 
 const manage = name => () =>
     import ('@/manage/' + name)
+const managepages = name => () =>
+    import ('@/managepages/' + name)
 export default new Router({
     mode: 'history',
     routes: [{
@@ -125,6 +127,11 @@ export default new Router({
                     path: '/500',
                     name: '500',
                     component: page('500')
+                },
+                {
+                    path: '/backgrounduser',
+                    name: 'backgrounduser',
+                    component: managepages('backgrounduser')
                 }
             ]
         },

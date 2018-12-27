@@ -22,7 +22,7 @@
         <i class="fa fa-meetup" style="color: #29ABE2"></i>&nbsp;
         <span class="footer-text">{{appName}} &nbsp;
           <el-tag size="mini">{{version}}</el-tag> <br>©make by
-          <a href="https://www.github.com/mengdu" target="_blank">{{author}}</a>
+       
         </span>
       </p>
     </div>
@@ -52,7 +52,7 @@ export default {
       this.isLoging = true;
       this.$http
         .post(
-          "/api/User/AdminLogin",
+          "/api/Boss/BackgroundUserLogin",
           Service.Encrypt.DataEncryption({
             UserName: this.username,
             UserPwd: this.password
@@ -66,7 +66,6 @@ export default {
               response.Data != undefined
             ) {
               if (response.Status == 100) {
-                debugger;
                 response.Data.UserPwd = null;
                 this.login(response.Data).then(res => {
                   this.$message.success("登录成功");
