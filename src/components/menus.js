@@ -25,17 +25,34 @@ const menus = [{
 
     //     }]
     // },
-    // {
-    //     id: 'user',
-    //     icon: 'fa fa-users',
-    //     label: '企业管理',
-    //     submenu: [{
-    //         id: 'userlist',
-    //         name: 'userlist',
-    //         label: '企业管理',
+    {
+        id: 'order',
+        icon: 'fa fa-paper-plane',
+        label: '订单管理',
+        submenu: [{
+            id: 'oredrlist',
+            name: 'oredrlist',
+            label: '订单管理',
 
-    //     }]
-    // },
+        }]
+    },
+    {
+        id: 'enterprise',
+        icon: 'fa fa-microchip',
+        label: '企业管理',
+        submenu: [{
+            id: 'enterpriselist',
+            name: 'enterpriselist',
+            label: '企业管理',
+
+        },
+        {
+            id: 'stafflist',
+            name: 'stafflist',
+            label: '员工管理',
+
+        }]
+    },
     // {
     //     id: 'user',
     //     icon: 'fa fa-users',

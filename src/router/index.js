@@ -132,6 +132,17 @@ export default new Router({
                     path: '/backgrounduser',
                     name: 'backgrounduser',
                     component: managepages('backgrounduser')
+                },
+                {
+                    path: '/enterpriselist',
+                    name: 'enterpriselist',
+                    component: managepages('enterpriselist')
+                }
+                ,
+                {
+                    path: '/stafflist',
+                    name: 'stafflist',
+                    component: managepages('stafflist')
                 }
             ]
         },
