@@ -9,24 +9,33 @@
     </div>
     <div class="box">
       <el-row>
-        <!-- <el-col :span="8"> 用户名:
-          <m-input placeholder="用户名" v-model="username" />
+        <el-col :span="8"> 企业名称:
+            <el-select v-model="enterpriseid" placeholder="请选择">
+            <el-option v-for="item in enterpriselistselect" :key="item.EnterpriseId" :label="item.EnterpriseName" :value="item.EnterpriseId">
+            </el-option>
+          </el-select>
         </el-col>
-        <el-col :span="8"> 手机号:
-          <m-input placeholder="手机号" v-model="phone" />
+        <el-col :span="8"> 员工姓名:
+          <m-input placeholder="员工姓名" v-model="staffname" />
         </el-col>
-        <m-button type="info" @click="onQueryClick(1)">查询</m-button>-->
+         <el-col :span="8"> 身份证号:
+          <m-input placeholder="身份证号" v-model="staffcardno" />
+        </el-col>
+      </el-row>
+       <p></p>
+      <el-row>
+        <m-button type="info" @click="onQueryClick(1)">查询</m-button>
         <m-button type="info" @click="onClickNewOpen()">添加</m-button>
       </el-row>
 
       <p></p>
+
       <el-table :data="tableData">
-        <el-table-column label="企业编号" prop="EnterpriseId"></el-table-column>
+        <el-table-column label="员工编号" prop="StaffId"></el-table-column>
         <el-table-column label="企业名称" prop="EnterpriseName"></el-table-column>
-        <el-table-column label="企业税务统一代码" prop="EnterpriseCode"></el-table-column>
-        <el-table-column label="联系人" prop="ContactsName"></el-table-column>
-        <el-table-column label="联系电话" prop="ContactsPhone"></el-table-column>
-        <el-table-column label="联系邮箱" prop="ContactsEmail"></el-table-column>
+        <el-table-column label="员工姓名" prop="StaffName"></el-table-column>
+        <el-table-column label="证件号" prop="StaffCardNo"></el-table-column>
+        <el-table-column label="生日" prop="StaffBirthday"></el-table-column>
         <el-table-column label="状态" prop="Status" :formatter="formatter"></el-table-column>
         <el-table-column label="创建时间" prop="CreateTime"></el-table-column>
         <el-table-column label="修改时间" prop="UpdateTime"></el-table-column>
@@ -56,24 +65,25 @@
         @current-change="handleCurrentChange"
       ></el-pagination>
     </div>
-    <el-dialog title="添加企业" :visible.sync="dialogFormVisible">
+    <el-dialog title="添加员工" :visible.sync="dialogFormVisible">
       <el-form :model="form">
-        <el-form-item label="企业名称" :label-width="formLabelWidth">
-          <el-input v-model="form.enterprisename" auto-complete="off"></el-input>
+         <el-form-item label="选择企业" :label-width="formLabelWidth">
+          <el-select v-model="form.enterpriseid" placeholder="请选择">
+            <el-option v-for="item in enterpriselist" :key="item.EnterpriseId" :label="item.EnterpriseName" :value="item.EnterpriseId">
+            </el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="企业税务统一代码" :label-width="formLabelWidth">
-          <el-input v-model="form.enterprisecode" auto-complete="off"></el-input>
+       <el-form-item label="员工名称" :label-width="formLabelWidth">
+          <el-input v-model="form.staffname" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="联系人" :label-width="formLabelWidth">
-          <el-input v-model="form.contactsname" auto-complete="off"></el-input>
+        <el-form-item label="证件号" :label-width="formLabelWidth">
+          <el-input v-model="form.staffcardno" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="联系电话" :label-width="formLabelWidth">
-          <el-input v-model="form.contactsphone" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="联系邮箱" :label-width="formLabelWidth">
-          <el-input v-model="form.contactsemail" auto-complete="off"></el-input>
-        </el-form-item>
-      </el-form>
+        <el-form-item label="生日" :label-width="formLabelWidth">
+          <el-date-picker v-model="form.staffbirthday" type="date">
+          </el-date-picker>
+          </el-form-item>
+        </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="onClickAdd(0)">确 定</el-button>
@@ -81,25 +91,23 @@
     </el-dialog>
     <el-dialog title="修改企业" :visible.sync="dialogMFormVisible">
       <el-form :model="form">
-        <el-form-item label="企业名称" :label-width="formLabelWidth">
-          <el-input v-model="form.enterprisename" auto-complete="off"></el-input>
+           <el-form-item label="企业名称" :label-width="formLabelWidth">
+          <el-input v-model="form.enterprisename" auto-complete="off"  :disabled="true"></el-input>
         </el-form-item>
-        <el-form-item label="企业税务统一代码" :label-width="formLabelWidth">
-          <el-input v-model="form.enterprisecode" auto-complete="off"></el-input>
+       <el-form-item label="员工名称" :label-width="formLabelWidth">
+          <el-input v-model="form.staffname" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="联系人" :label-width="formLabelWidth">
-          <el-input v-model="form.contactsname" auto-complete="off"></el-input>
+        <el-form-item label="证件号" :label-width="formLabelWidth">
+          <el-input v-model="form.staffcardno" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="联系电话" :label-width="formLabelWidth">
-          <el-input v-model="form.contactsphone" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="联系邮箱" :label-width="formLabelWidth">
-          <el-input v-model="form.contactsemail" auto-complete="off"></el-input>
-        </el-form-item>
-      </el-form>
+        <el-form-item label="生日" :label-width="formLabelWidth">
+          <el-date-picker v-model="form.staffbirthday" type="date">
+          </el-date-picker>
+          </el-form-item>
+        </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogMFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="onClickAdd(form.enterpriseId)">确 定</el-button>
+        <el-button type="primary" @click="onClickAdd(form.staffid)">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -115,15 +123,23 @@ export default {
       dialogFormVisible: false,
       dialogMFormVisible: false,
       form: {
-        enterprisename: "",
-        enterprisecode: "",
-        contactsname: "",
-        contactsphone: "",
-        contactsemail: "",
-        enterpriseId: 0
+        enterprise: null,
+        enterpriseid:0,
+        enterprisename:"",
+        staffname: "",
+        staffcardno: "",
+        staffbirthday: "",
+        staffid: 0
       },
       formLabelWidth: "100px",
-      currentPage: 1
+      currentPage: 1,
+      enterpriselist: [
+      ],
+      enterpriselistselect: [
+      ],
+      staffname:"",
+      staffcardno:"",
+      enterpriseid:-1
     };
   },
   methods: {
@@ -151,10 +167,13 @@ export default {
       this.currentPage = pageindex;
       this.$http
         .post(
-          "/api/Boss/GetEnterpriseList",
+          "/api/Boss/GetStaffList",
           Service.Encrypt.DataEncryption({
             pageindex: pageindex,
-            pagesize: 10
+            pagesize: 10,
+             StaffName:this.staffname,
+             EnterpriseId :this.enterpriseid,
+             StaffCardNo : this.staffcardno
           })
         )
         .then(
@@ -182,21 +201,21 @@ export default {
     },
     onClickNewOpen() {
       this.dialogFormVisible = true;
-      this.form.enterprisename = "";
-      this.form.enterprisecode = "";
-      this.form.contactsname = "";
-      this.form.contactsphone = "";
-      this.form.contactsemail = "";
-      this.form.enterpriseId = 0;
+      this.form.enterprise = null;
+      this.enterpriseid=0,
+      this.enterprisename="",
+      this.form.staffname = "";
+      this.form.staffcardno = "";
+      this.form.staffbirthday = "";
+      this.getenterprise();
     },
-    onClickModify(enterprise) {
+    onClickModify(staff) {
       this.dialogMFormVisible = true;
-      this.form.enterprisename = enterprise.EnterpriseName;
-      this.form.enterprisecode = enterprise.EnterpriseCode;
-      this.form.contactsname = enterprise.ContactsName;
-      this.form.contactsphone = enterprise.ContactsPhone;
-      this.form.contactsemail = enterprise.ContactsEmail;
-      this.form.enterpriseId = enterprise.EnterpriseId;
+      this.form.enterprisename = staff.EnterpriseName;
+      this.form.staffname = staff.StaffName;
+      this.form.staffcardno = staff.StaffCardNo;
+      this.form.staffbirthday = staff.StaffBirthday;
+      this.form.staffid = staff.StaffId;
     },
     onClickModifyState(userid, status) {
       this.$http
@@ -230,18 +249,26 @@ export default {
           }
         );
     },
-    onClickAdd(enterpriseId) {
-        debugger;
-      this.$http
+    onClickAdd(staffid) {
+      if(staffid>0){
+      this.form.enterpriseid=0;
+      this.form.enterprisename="";
+        }else{
+           this.form.enterpriseid=this.form.enterprise.EnterpriseId;
+           this.form.enterprisename=this.form.enterprise.EnterpriseName;
+      }
+     
+       this.$http
         .post(
-          "/api/Boss/AddEnterprise",
+          "/api/Boss/AddStaff",
           Service.Encrypt.DataEncryption({
+            EnterpriseId: this.form.enterpriseid,
             EnterpriseName: this.form.enterprisename,
-            EnterpriseCode: this.form.enterprisecode,
-            ContactsName: this.form.contactsname,
-            ContactsPhone: this.form.contactsphone,
-            ContactsEmail: this.form.contactsemail,
-            EnterpriseId: enterpriseId
+            StaffName: this.form.staffname,
+            StaffCardNo: this.form.staffcardno,
+            StaffBirthday: this.form.staffbirthday,
+            StaffId: staffid
+           
           })
         )
         .then(
@@ -255,10 +282,67 @@ export default {
                 this.$message("用户添加或修改成功!");
                 this.dialogFormVisible = false;
                 this.dialogMFormVisible = false;
-                this.form.name = "";
-                this.form.rate = "";
-                this.form.phone = "";
                 this.onQueryClick(1);
+              } else {
+                this.$message(response.Message);
+              }
+            } else {
+              this.$message(response.Message);
+            }
+          },
+          error => {
+            this.$message(error);
+            console.log(error);
+          }
+        );
+    },
+    getenterprise(){
+      this.$http
+        .post(
+          "/api/Boss/GetEnterpriseListSelect",
+          Service.Encrypt.DataEncryption({
+           })
+        )
+        .then(
+          response => {
+            if (
+              response.Data &&
+              response.Data != null &&
+              response.Data != undefined
+            ) {
+              if (response.Status == 100) {
+               
+                 this.enterpriselist = response.Data;
+              } else {
+                this.$message(response.Message);
+              }
+            } else {
+              this.$message(response.Message);
+            }
+          },
+          error => {
+            this.$message(error);
+            console.log(error);
+          }
+        );
+    },
+     getenterpriseselect(){
+      this.$http
+        .post(
+          "/api/Boss/GetEnterpriseListSelect",
+          Service.Encrypt.DataEncryption({
+           })
+        )
+        .then(
+          response => {
+            if (
+              response.Data &&
+              response.Data != null &&
+              response.Data != undefined
+            ) {
+              if (response.Status == 100) {
+               
+                 this.enterpriselistselect = response.Data;
               } else {
                 this.$message(response.Message);
               }
@@ -274,6 +358,7 @@ export default {
     }
   },
   mounted() {
+    this.getenterpriseselect();
     this.onQueryClick(1);
   }
 };
