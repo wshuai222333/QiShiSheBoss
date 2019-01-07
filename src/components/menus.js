@@ -30,8 +30,8 @@ const menus = [{
         icon: 'fa fa-paper-plane',
         label: '订单管理',
         submenu: [{
-            id: 'oredrlist',
-            name: 'oredrlist',
+            id: 'orderdown',
+            name: 'orderdown',
             label: '订单管理',
 
         }]

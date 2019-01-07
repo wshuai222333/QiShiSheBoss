@@ -139,7 +139,7 @@ export default {
       ],
       staffname:"",
       staffcardno:"",
-      enterpriseid:-1
+      enterpriseid:0
     };
   },
   methods: {
@@ -343,6 +343,7 @@ export default {
               if (response.Status == 100) {
                
                  this.enterpriselistselect = response.Data;
+                 this.enterpriselistselect.push({EnterpriseId:0,EnterpriseName:"全部"});
               } else {
                 this.$message(response.Message);
               }

@@ -144,6 +144,12 @@ export default new Router({
                     name: 'stafflist',
                     component: managepages('stafflist')
                 }
+                ,
+                {
+                    path: '/orderdown',
+                    name: 'orderdown',
+                    component: managepages('orderdown')
+                }
             ]
         },
         {
