@@ -22,6 +22,12 @@
           <m-input placeholder="身份证号" v-model="staffcardno" />
         </el-col>
       </el-row>
+      <p></p>
+       <el-row>
+         <el-col :span="9"> 手机号:
+          <m-input placeholder="手机号" v-model="phone" />
+        </el-col>
+      </el-row>
        <p></p>
       <el-row>
         <m-button type="info" @click="onQueryClick(1)">查询</m-button>
@@ -36,12 +42,15 @@
         <el-table-column label="员工姓名" prop="StaffName"></el-table-column>
         <el-table-column label="证件号" prop="StaffCardNo"></el-table-column>
         <el-table-column label="生日" prop="StaffBirthday"></el-table-column>
+        <el-table-column label="手机号" prop="Phone"></el-table-column>
+        <el-table-column label="积分" prop="Integral"></el-table-column>
         <el-table-column label="状态" prop="Status" :formatter="formatter"></el-table-column>
         <el-table-column label="创建时间" prop="CreateTime"></el-table-column>
         <el-table-column label="修改时间" prop="UpdateTime"></el-table-column>
         <el-table-column fixed="right" label="操作" width="100">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="onClickModify(scope.row)">编辑</el-button>
+            <el-button type="text" size="small" @click="onClickIntegralOpen(scope.row)">积分</el-button>
             <!-- <el-button
               type="text"
               size="small"
@@ -68,8 +77,8 @@
     <el-dialog title="添加员工" :visible.sync="dialogFormVisible">
       <el-form :model="form">
          <el-form-item label="选择企业" :label-width="formLabelWidth">
-          <el-select v-model="form.enterpriseid" placeholder="请选择">
-            <el-option v-for="item in enterpriselist" :key="item.EnterpriseId" :label="item.EnterpriseName" :value="item.EnterpriseId">
+          <el-select v-model="form.enterprise" placeholder="请选择">
+            <el-option v-for="item in enterpriselist" :key="item" :label="item.EnterpriseName" :value="item">
             </el-option>
           </el-select>
         </el-form-item>
@@ -83,6 +92,9 @@
           <el-date-picker v-model="form.staffbirthday" type="date">
           </el-date-picker>
           </el-form-item>
+           <el-form-item label="手机号" :label-width="formLabelWidth">
+          <el-input v-model="form.phone" auto-complete="off"></el-input>
+        </el-form-item>
         </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -110,6 +122,17 @@
         <el-button type="primary" @click="onClickAdd(form.staffid)">确 定</el-button>
       </div>
     </el-dialog>
+    <el-dialog title="增加积分" :visible.sync="dialogIFormVisible">
+      <el-form :model="form">
+          <el-form-item label="增加积分" :label-width="formLabelWidth">
+          <el-input v-model="integral" auto-complete="off"></el-input>
+        </el-form-item>
+    </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogMFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="onClickModifyIntegral(form.staffid)">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -122,6 +145,7 @@ export default {
       total: 0,
       dialogFormVisible: false,
       dialogMFormVisible: false,
+      dialogIFormVisible: false,
       form: {
         enterprise: null,
         enterpriseid:0,
@@ -129,6 +153,7 @@ export default {
         staffname: "",
         staffcardno: "",
         staffbirthday: "",
+        phone:"",
         staffid: 0
       },
       formLabelWidth: "100px",
@@ -139,6 +164,8 @@ export default {
       ],
       staffname:"",
       staffcardno:"",
+      phone:"",
+      integral:0,
       enterpriseid:0
     };
   },
@@ -173,7 +200,8 @@ export default {
             pagesize: 10,
              StaffName:this.staffname,
              EnterpriseId :this.enterpriseid,
-             StaffCardNo : this.staffcardno
+             StaffCardNo : this.staffcardno,
+             Phone : this.phone
           })
         )
         .then(
@@ -207,6 +235,7 @@ export default {
       this.form.staffname = "";
       this.form.staffcardno = "";
       this.form.staffbirthday = "";
+      this.form.phone = "";
       this.getenterprise();
     },
     onClickModify(staff) {
@@ -215,6 +244,7 @@ export default {
       this.form.staffname = staff.StaffName;
       this.form.staffcardno = staff.StaffCardNo;
       this.form.staffbirthday = staff.StaffBirthday;
+      this.form.phone = staff.Phone
       this.form.staffid = staff.StaffId;
     },
     onClickModifyState(userid, status) {
@@ -249,6 +279,44 @@ export default {
           }
         );
     },
+    onClickIntegralOpen(staff) {
+      this.dialogIFormVisible = true;
+      this.form.staffid = staff.StaffId;
+      this.integral = 0;
+    },
+    onClickModifyIntegral(staffid) {
+      this.$http
+        .post(
+          "/api/Boss/UpdateStaffIntegral",
+          Service.Encrypt.DataEncryption({
+            StaffId: staffid,
+            Integral: this.integral
+          })
+        )
+        .then(
+          response => {
+            if (
+              response.Data &&
+              response.Data != null &&
+              response.Data != undefined
+            ) {
+              if (response.Data > 0) {
+                this.$message("积分增加成功!");
+                this.dialogIFormVisible = false;
+                this.onQueryClick(1);
+              } else {
+                this.$message(response.Message);
+              }
+            } else {
+              this.$message(response.Message);
+            }
+          },
+          error => {
+            this.$message(error);
+            console.log(error);
+          }
+        );
+    },
     onClickAdd(staffid) {
       if(staffid>0){
       this.form.enterpriseid=0;
@@ -267,6 +335,7 @@ export default {
             StaffName: this.form.staffname,
             StaffCardNo: this.form.staffcardno,
             StaffBirthday: this.form.staffbirthday,
+            Phone :this.form.phone,
             StaffId: staffid
            
           })
@@ -311,8 +380,8 @@ export default {
               response.Data != undefined
             ) {
               if (response.Status == 100) {
-               
-                 this.enterpriselist = response.Data;
+                  this.enterpriselist = response.Data;
+                  
               } else {
                 this.$message(response.Message);
               }
@@ -326,7 +395,7 @@ export default {
           }
         );
     },
-     getenterpriseselect(){
+    getenterpriseselect(){
       this.$http
         .post(
           "/api/Boss/GetEnterpriseListSelect",
