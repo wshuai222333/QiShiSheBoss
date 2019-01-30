@@ -137,18 +137,21 @@ export default new Router({
                     path: '/enterpriselist',
                     name: 'enterpriselist',
                     component: managepages('enterpriselist')
-                }
-                ,
+                },
                 {
                     path: '/stafflist',
                     name: 'stafflist',
                     component: managepages('stafflist')
-                }
-                ,
+                },
                 {
                     path: '/orderdown',
                     name: 'orderdown',
                     component: managepages('orderdown')
+                },
+                {
+                    path: '/orderdetail',
+                    name: 'orderdetail',
+                    component: managepages('orderdetail')
                 }
             ]
         },
