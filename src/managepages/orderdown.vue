@@ -16,23 +16,31 @@
           <m-input placeholder="手机号" v-model="phone" />
         </el-col>
         <m-button type="info" @click="onQueryClick(1)">查询</m-button>-->
-        <m-button type="info" @click="onClickNewOpen()">添加</m-button>
       </el-row>
 
       <p></p>
       <el-table :data="tableData">
-        <el-table-column label="企业编号" prop="EnterpriseId"></el-table-column>
-        <el-table-column label="企业名称" prop="EnterpriseName"></el-table-column>
-        <el-table-column label="企业税务统一代码" prop="EnterpriseCode"></el-table-column>
-        <el-table-column label="联系人" prop="ContactsName"></el-table-column>
-        <el-table-column label="联系电话" prop="ContactsPhone"></el-table-column>
-        <el-table-column label="联系邮箱" prop="ContactsEmail"></el-table-column>
-        <el-table-column label="状态" prop="Status" :formatter="formatter"></el-table-column>
-        <el-table-column label="创建时间" prop="CreateTime"></el-table-column>
-        <el-table-column label="修改时间" prop="UpdateTime"></el-table-column>
-        <el-table-column fixed="right" label="操作" width="100">
+        <el-table-column prop="OrderId" label="订单号"></el-table-column>
+        <el-table-column prop="BookingType" label="预定类型" :formatter="formatterbookingtype"></el-table-column>
+        <el-table-column prop="DepartDate" label="出发日期"></el-table-column>
+        <el-table-column prop="DepartCity" label="出发城市"></el-table-column>
+        <el-table-column prop="ArriveDate" label="到达日期"></el-table-column>
+        <el-table-column prop="ArriveCity" label="到底城市"></el-table-column>
+        <el-table-column prop="TravelWay" label="交通方式" :formatter="formattertravelway"></el-table-column>
+        <el-table-column prop="HotelCheckinDate" label="入住日期"></el-table-column>
+        <el-table-column prop="HotelCheckoutDate" label="离店日期"></el-table-column>
+        <el-table-column prop="HotelType" label="酒店类型" :formatter="formatterhoteltype"></el-table-column>
+        <el-table-column prop="HotelLocation" label="期待位置" :formatter="formatterhotellocation"></el-table-column>
+        <el-table-column prop="Status" label="订单状态" width="120">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="onClickModify(scope.row)">编辑</el-button>
+            <el-tag v-if="scope.row.Status==0">等待确认需求</el-tag>
+            <el-tag type="danger" v-if="scope.row.Status==1">等待员工确认</el-tag>
+            <el-tag type="success" v-if="scope.row.Status==3">确认完成</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="100">
+          <template slot-scope="scope">
+            <!-- <el-button type="text" size="small" @click="onClickModify(scope.row)">编辑</el-button> -->
             <!-- <el-button
               type="text"
               size="small"
@@ -44,7 +52,7 @@
               size="small"
               v-if="scope.row.Status==0"
               @click="onClickModifyState(scope.row.BackgroundUserId,1)"
-            >启用</el-button> -->
+            >启用</el-button>-->
           </template>
         </el-table-column>
       </el-table>
@@ -127,17 +135,68 @@ export default {
     };
   },
   methods: {
-    formatter(row, column) {
+     formatterbookingtype(row, column) {
       var msg = "";
-      switch (parseInt(row.Status)) {
-        case 1:
-          msg = "正常";
-          break;
+      switch (parseInt(row.BookingType)) {
         case 0:
-          msg = "停用";
+          msg = "机票/火车票";
+          break;
+        case 1:
+          msg = "酒店";
+          break;
+        case 2:
+          msg = "机票/火车票&&酒店";
           break;
         default:
-          msg = "未知状态";
+          msg = "未知";
+          break;
+      }
+      return msg;
+    },
+    formattertravelway(row, column) {
+      var msg = "";
+      switch (parseInt(row.TravelWay)) {
+        case 0:
+          msg = "飞机";
+          break;
+        case 1:
+          msg = "火车";
+          break;
+        default:
+          msg = "未知";
+          break;
+      }
+      return msg;
+    },
+    formatterhoteltype(row, column) {
+      var msg = "";
+      switch (parseInt(row.HotelType)) {
+        case 0:
+          msg = "立即支付";
+          break;
+        case 1:
+          msg = "到店支付";
+          break;
+        default:
+          msg = "未知";
+          break;
+      }
+      return msg;
+    },
+    formatterhotellocation(row, column) {
+      var msg = "";
+      switch (parseInt(row.HotelLocation)) {
+        case 0:
+          msg = "系统默认";
+          break;
+        case 1:
+          msg = "目的地";
+          break;
+        case 2:
+          msg = "机场/车站";
+          break;
+        default:
+          msg = "未知";
           break;
       }
       return msg;
@@ -151,7 +210,7 @@ export default {
       this.currentPage = pageindex;
       this.$http
         .post(
-          "/api/Boss/GetEnterpriseList",
+          "/api/Boss/GetDemandOrderListByBoss",
           Service.Encrypt.DataEncryption({
             pageindex: pageindex,
             pagesize: 10
@@ -231,7 +290,7 @@ export default {
         );
     },
     onClickAdd(enterpriseId) {
-        debugger;
+      debugger;
       this.$http
         .post(
           "/api/Boss/AddEnterprise",
