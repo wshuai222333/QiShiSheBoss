@@ -1,25 +1,40 @@
 <template>
-  <div class="table">
-    <div class="crumbs">
-      <el-breadcrumb separator="/">
-        <el-breadcrumb-item>
-          <i class="el-icon-lx-cascades"></i> 基础表格
-        </el-breadcrumb-item>
+  <div class="page-body">
+    <div class="page-header">
+      <h1 class="page-title">订单详情</h1>
+      <el-breadcrumb>
+        <el-breadcrumb-item :to="{path: '/'}"></el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    <div class="container">
-      <el-steps :active="1" style="width:65%">
-        <el-step title="填单" description="填写行程需求单"></el-step>
-        <el-step title="确认" description="确认具体行程"></el-step>
-        <el-step title="出行" description="行程制定成功"></el-step>
-      </el-steps>
-
+    <div class="box">
       <p style="height:10px;"></p>
+      <!--出行人需求信息-->
+      <el-card class="box-card" style="width:65%">
+        <div slot="header" class="clearfix">
+          <span>需求信息</span>
+        </div>
+        <div>
+          <el-form ref="form" :model="form" label-width="100px">
+            <el-form-item>
+              <el-row>
+                <el-col :span="4">订单号:123123</el-col>
+                <el-col :span="4">预定类型：机票</el-col>
+                <el-col :span="4">交通方式：方式</el-col>
+                <el-col :span="4">交通方式：方式</el-col>
+                <el-col :span="4">交通方式：方式</el-col>
+                <el-col :span="4">交通方式：方式</el-col>
+              </el-row>
+            </el-form-item>
+            <el-form-item label="机票"></el-form-item>
+          </el-form>
+        </div>
+      </el-card>
+      <p style="height:5px;"></p>
       <!--机票信息-->
       <el-card class="box-card" style="width:65%">
         <div slot="header" class="clearfix">
           <span>机票信息</span>
-          <el-button style="float: right; padding: 3px 0" type="text" @click="clickopendialog">更改航班</el-button>
+          <el-button style="float: right; padding: 3px 0" type="text" @click="clickopendialog">添加航班</el-button>
         </div>
         <div>
           <el-table :data="tableData3" style="width:100%">
@@ -52,20 +67,15 @@
             </el-table-column>
           </el-table>
         </div>
-        <div class="price">
-          <span class="price-subtotal">小计:1000</span>
-          <br>
-          <span class="price-tax">燃油基建:50</span>
-        </div>
       </el-card>
 
       <p style="height:5px;"></p>
 
-       <!--火车票信息-->
+      <!--火车票信息-->
       <el-card class="box-card" style="width:65%">
         <div slot="header" class="clearfix">
           <span>火车票信息</span>
-          <el-button style="float: right; padding: 3px 0" type="text" @click="clickopendialog">更改火车票</el-button>
+          <el-button style="float: right; padding: 3px 0" type="text" @click="clickopendialog">添加火车票</el-button>
         </div>
         <div>
           <el-table :data="tableData3" style="width:100%">
@@ -98,9 +108,6 @@
             </el-table-column>
           </el-table>
         </div>
-        <div class="price">
-          <span class="price-subtotal">小计:1000</span>
-        </div>
       </el-card>
 
       <p style="height:5px;"></p>
@@ -109,7 +116,7 @@
       <el-card class="box-card" style="width:65%">
         <div slot="header" class="clearfix">
           <span>酒店信息</span>
-          <el-button style="float: right; padding: 3px 0" type="text" @click="clickopenhdialog">更改酒店</el-button>
+          <el-button style="float: right; padding: 3px 0" type="text" @click="clickopenhdialog">添加酒店</el-button>
         </div>
         <div>
           <el-table :data="tableData2" style="width:100%">
@@ -134,11 +141,6 @@
             </el-table-column>
           </el-table>
         </div>
-        <div class="price">
-          <span class="price-subtotal">小计:1000</span>
-          <br>
-          <span class="price-tax">房间数:3</span>
-        </div>
       </el-card>
 
       <!--出行人信息-->
@@ -155,232 +157,290 @@
             <el-table-column prop="zip" label="票号"></el-table-column>
           </el-table>
         </div>
-        <div class="price">
-          <strong class="price-subtotal">总计:1000</strong>
-          <br>
-          <span class="price-tax">人数:3</span>
-        </div>
       </el-card>
       <p style="height:10px;"></p>
       <el-row>
         <el-button type="primary" @click="onSubmit">确认行程</el-button>
       </el-row>
     </div>
-
-    <!--更改航班弹窗-->
-    <el-dialog title="更改航班" :visible.sync="dialogFormVisible">
-      <el-table
-        ref="singleTable"
-        :data="tableData"
-        highlight-current-row
-        @current-change="handleCurrentChange"
-        style="width: 100%"
-      >
-        <el-table-column property="date" label="出发时间"></el-table-column>
-        <el-table-column property="date1" label="返回时间"></el-table-column>
-        <el-table-column property="city" label="往返城市"></el-table-column>
-        <el-table-column property="fightno" label="航班号"></el-table-column>
-        <el-table-column property="address" label="舱位类型"></el-table-column>
-      </el-table>
+    <el-dialog title="添加企业" :visible.sync="dialogFormVisible">
+      <el-form :model="form">
+        <el-form-item label="企业名称" :label-width="formLabelWidth">
+          <el-input v-model="form.enterprisename" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="企业税务统一代码" :label-width="formLabelWidth">
+          <el-input v-model="form.enterprisecode" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="联系人" :label-width="formLabelWidth">
+          <el-input v-model="form.contactsname" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="联系电话" :label-width="formLabelWidth">
+          <el-input v-model="form.contactsphone" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="联系邮箱" :label-width="formLabelWidth">
+          <el-input v-model="form.contactsemail" auto-complete="off"></el-input>
+        </el-form-item>
+      </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="onModifyQrcode(form.userid)">确 定</el-button>
+        <el-button type="primary" @click="onClickAdd(0)">确 定</el-button>
       </div>
     </el-dialog>
-    <!--更改酒店弹窗-->
-    <el-dialog title="更改酒店" :visible.sync="dialogHFormVisible">
-      <el-table
-        ref="singleTable"
-        :data="tableData1"
-        highlight-current-row
-        @current-change="handleCurrentChange"
-        style="width: 100%"
-      >
-        <el-table-column property="city" label="酒店名称"></el-table-column>
-        <el-table-column property="address" label="酒店地址"></el-table-column>
-        <el-table-column property="date" label="入住时间"></el-table-column>
-        <el-table-column property="date1" label="离店时间"></el-table-column>
-        <el-table-column property="fightno" label="房间类型"></el-table-column>
-      </el-table>
+    <el-dialog title="修改企业" :visible.sync="dialogMFormVisible">
+      <el-form :model="form">
+        <el-form-item label="企业名称" :label-width="formLabelWidth">
+          <el-input v-model="form.enterprisename" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="企业税务统一代码" :label-width="formLabelWidth">
+          <el-input v-model="form.enterprisecode" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="联系人" :label-width="formLabelWidth">
+          <el-input v-model="form.contactsname" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="联系电话" :label-width="formLabelWidth">
+          <el-input v-model="form.contactsphone" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="联系邮箱" :label-width="formLabelWidth">
+          <el-input v-model="form.contactsemail" auto-complete="off"></el-input>
+        </el-form-item>
+      </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="onModifyQrcode(form.userid)">确 定</el-button>
+        <el-button @click="dialogMFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="onClickAdd(form.enterpriseId)">确 定</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
+import Service from "../_common";
 export default {
   data() {
     return {
-      tableData3: [
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          province: "上海",
-          city: "普陀区",
-          address: "上海市普陀区金沙江路 1518 弄",
-          zip: 200333,
-          tag: "去程"
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          province: "上海",
-          city: "普陀区",
-          address: "上海市普陀区金沙江路 1518 弄",
-          zip: 200333,
-          tag: "返程"
-        }
-      ],
-      tableData: [
-        {
-          date: "2016-05-02 09:00-19:00",
-          date1: "2016-05-02 10:00-13:00",
-          city: "北京首都-上海虹桥-北京首都",
-          fightno: "CA2356/CA3467",
-          address: "经济舱"
-        },
-        {
-          date: "2016-05-02 09:00-19:00",
-          date1: "2016-05-02 10:00-13:00",
-          city: "北京首都-上海虹桥-北京首都",
-          fightno: "CA2356/CA3467",
-          address: "经济舱"
-        },
-        {
-          date: "2016-05-02 09:00-19:00",
-          date1: "2016-05-02 10:00-13:00",
-          city: "北京首都-上海虹桥-北京首都",
-          fightno: "CA2356/CA3467",
-          address: "经济舱"
-        },
-        {
-          date: "2016-05-02 09:00-19:00",
-          date1: "2016-05-02 10:00-13:00",
-          city: "北京首都-上海虹桥-北京首都",
-          fightno: "CA2356/CA3467",
-          address: "经济舱"
-        }
-      ],
-      tableData1: [
-        {
-          date: "2016-05-02",
-          date1: "2016-05-04",
-          city: "北京城市酒店",
-          fightno: "双人标间",
-          address: "东四十条建设街15号"
-        },
-        {
-          date: "2016-05-02",
-          date1: "2016-05-04",
-          city: "北京城市酒店",
-          fightno: "双人标间",
-          address: "东四十条建设街15号"
-        },
-        {
-          date: "2016-05-02",
-          date1: "2016-05-04",
-          city: "北京城市酒店",
-          fightno: "双人标间",
-          address: "东四十条建设街15号"
-        },
-        {
-          date: "2016-05-02",
-          date1: "2016-05-04",
-          city: "北京城市酒店",
-          fightno: "双人标间",
-          address: "东四十条建设街15号"
-        }
-      ],
-      tableData2: [
-        {
-          date: "2016-05-02",
-          date1: "2016-05-04",
-          city: "北京城市酒店",
-          fightno: "双人标间",
-          address: "东四十条建设街15号",
-          count: 1
-        }
-      ],
+      tableData: [],
+      total: 0,
       dialogFormVisible: false,
-      dialogHFormVisible: false
+      dialogMFormVisible: false,
+      form: {
+        enterprisename: "",
+        enterprisecode: "",
+        contactsname: "",
+        contactsphone: "",
+        contactsemail: "",
+        enterpriseId: 0
+      },
+      formLabelWidth: "100px",
+      currentPage: 1
     };
   },
   methods: {
-    getSummaries(param) {
-      const { columns, data } = param;
-      const sums = [];
-      columns.forEach((column, index) => {
-        if (index === 0) {
-          sums[index] = "票面价格";
-          return;
-        }
-        if (index === 1) {
-          sums[index] = "1000";
-          return;
-        }
-        if (index === 2) {
-          sums[index] = "燃油基建费";
-          return;
-        }
-        if (index === 3) {
-          sums[index] = "50";
-          return;
-        }
-        if (index === 4) {
-          sums[index] = "总价";
-          return;
-        }
-        if (index === 5) {
-          sums[index] = "1050";
-          return;
-        }
-      });
-      return sums;
+    formatterbookingtype(row, column) {
+      var msg = "";
+      switch (parseInt(row.BookingType)) {
+        case 0:
+          msg = "机票/火车票";
+          break;
+        case 1:
+          msg = "酒店";
+          break;
+        case 2:
+          msg = "机票/火车票&&酒店";
+          break;
+        default:
+          msg = "未知";
+          break;
+      }
+      return msg;
     },
-    clickopendialog() {
+    formattertravelway(row, column) {
+      var msg = "";
+      switch (parseInt(row.TravelWay)) {
+        case 0:
+          msg = "飞机";
+          break;
+        case 1:
+          msg = "火车";
+          break;
+        default:
+          msg = "未知";
+          break;
+      }
+      return msg;
+    },
+    formatterhoteltype(row, column) {
+      var msg = "";
+      switch (parseInt(row.HotelType)) {
+        case 0:
+          msg = "立即支付";
+          break;
+        case 1:
+          msg = "到店支付";
+          break;
+        default:
+          msg = "未知";
+          break;
+      }
+      return msg;
+    },
+    formatterhotellocation(row, column) {
+      var msg = "";
+      switch (parseInt(row.HotelLocation)) {
+        case 0:
+          msg = "系统默认";
+          break;
+        case 1:
+          msg = "目的地";
+          break;
+        case 2:
+          msg = "机场/车站";
+          break;
+        default:
+          msg = "未知";
+          break;
+      }
+      return msg;
+    },
+
+    handleCurrentChange(val) {
+      this.onQueryClick(val);
+    },
+
+    onQueryClick: function(pageindex) {
+      this.currentPage = pageindex;
+      this.$http
+        .post(
+          "/api/Boss/GetDemandOrderListByBoss",
+          Service.Encrypt.DataEncryption({
+            pageindex: pageindex,
+            pagesize: 10
+          })
+        )
+        .then(
+          response => {
+            if (
+              response.Data &&
+              response.Data != null &&
+              response.Data != undefined
+            ) {
+              if (response.Status == 100) {
+                this.total = response.Data.TotalItems;
+                this.tableData = response.Data.Items;
+              } else {
+                this.$message(response.Message);
+              }
+            } else {
+              this.$message(response.Message);
+            }
+          },
+          error => {
+            this.$message(error);
+            console.log(error);
+          }
+        );
+    },
+    onClickNewOpen() {
       this.dialogFormVisible = true;
+      this.form.enterprisename = "";
+      this.form.enterprisecode = "";
+      this.form.contactsname = "";
+      this.form.contactsphone = "";
+      this.form.contactsemail = "";
+      this.form.enterpriseId = 0;
     },
-    clickopenhdialog() {
-      this.dialogHFormVisible = true;
+    onClickModify(enterprise) {
+      this.dialogMFormVisible = true;
+      this.form.enterprisename = enterprise.EnterpriseName;
+      this.form.enterprisecode = enterprise.EnterpriseCode;
+      this.form.contactsname = enterprise.ContactsName;
+      this.form.contactsphone = enterprise.ContactsPhone;
+      this.form.contactsemail = enterprise.ContactsEmail;
+      this.form.enterpriseId = enterprise.EnterpriseId;
+    },
+    onClickModifyState(userid, status) {
+      this.$http
+        .post(
+          "/api/Boss/UpdateBackgroundUser",
+          Service.Encrypt.DataEncryption({
+            Status: status,
+            BackgroundUserId: userid
+          })
+        )
+        .then(
+          response => {
+            if (
+              response.Data &&
+              response.Data != null &&
+              response.Data != undefined
+            ) {
+              if (response.Data > 0) {
+                this.$message("用户状态修改成功!");
+                this.onQueryClick(1);
+              } else {
+                this.$message(response.Message);
+              }
+            } else {
+              this.$message(response.Message);
+            }
+          },
+          error => {
+            this.$message(error);
+            console.log(error);
+          }
+        );
+    },
+    onClickAdd(enterpriseId) {
+      debugger;
+      this.$http
+        .post(
+          "/api/Boss/AddEnterprise",
+          Service.Encrypt.DataEncryption({
+            EnterpriseName: this.form.enterprisename,
+            EnterpriseCode: this.form.enterprisecode,
+            ContactsName: this.form.contactsname,
+            ContactsPhone: this.form.contactsphone,
+            ContactsEmail: this.form.contactsemail,
+            EnterpriseId: enterpriseId
+          })
+        )
+        .then(
+          response => {
+            if (
+              response.Data &&
+              response.Data != null &&
+              response.Data != undefined
+            ) {
+              if (response.Data > 0) {
+                this.$message("用户添加或修改成功!");
+                this.dialogFormVisible = false;
+                this.dialogMFormVisible = false;
+                this.form.name = "";
+                this.form.rate = "";
+                this.form.phone = "";
+                this.onQueryClick(1);
+              } else {
+                this.$message(response.Message);
+              }
+            } else {
+              this.$message(response.Message);
+            }
+          },
+          error => {
+            this.$message(error);
+            console.log(error);
+          }
+        );
     }
+  },
+  mounted() {
+    this.onQueryClick(1);
   }
 };
 </script>
-<style scoped>
-.handle-box {
-  margin-bottom: 20px;
-}
 
-.handle-select {
-  width: 120px;
-}
 
-.handle-input {
-  width: 300px;
-  display: inline-block;
-}
-.del-dialog-cnt {
-  font-size: 16px;
-  text-align: center;
-}
-.table {
+<style>
+.box-body {
   width: 100%;
-  font-size: 14px;
-}
-.red {
-  color: #ff0000;
-}
-.price {
-  padding: 5px;
-  float: right;
-}
-.price-subtotal {
-  font-size: 14px;
-}
-.price-tax {
-  font-size: 12px;
+  overflow: auto;
 }
 </style>

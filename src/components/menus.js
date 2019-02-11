@@ -30,28 +30,36 @@ const menus = [{
         icon: 'fa fa-paper-plane',
         label: '订单管理',
         submenu: [{
-            id: 'orderdown',
-            name: 'orderdown',
-            label: '订单管理',
+                id: 'orderdown',
+                name: 'orderdown',
+                label: '订单管理',
 
-        }]
+            },
+            {
+                id: 'orderdetail',
+                name: 'orderdetail',
+                label: '订单详情',
+
+            }
+        ]
     },
     {
         id: 'enterprise',
         icon: 'fa fa-microchip',
         label: '企业管理',
         submenu: [{
-            id: 'enterpriselist',
-            name: 'enterpriselist',
-            label: '企业管理',
+                id: 'enterpriselist',
+                name: 'enterpriselist',
+                label: '企业管理',
 
-        },
-        {
-            id: 'stafflist',
-            name: 'stafflist',
-            label: '员工管理',
+            },
+            {
+                id: 'stafflist',
+                name: 'stafflist',
+                label: '员工管理',
 
-        }]
+            }
+        ]
     },
     // {
     //     id: 'user',
