@@ -25,7 +25,7 @@
         <el-table-column prop="DepartDate" label="出发日期"></el-table-column>
         <el-table-column prop="DepartCity" label="出发城市"></el-table-column>
         <el-table-column prop="ArriveDate" label="到达日期"></el-table-column>
-        <el-table-column prop="ArriveCity" label="到底城市"></el-table-column>
+        <el-table-column prop="ArriveCity" label="到达城市"></el-table-column>
         <el-table-column prop="TravelWay" label="交通方式" :formatter="formattertravelway"></el-table-column>
         <el-table-column prop="HotelCheckinDate" label="入住日期"></el-table-column>
         <el-table-column prop="HotelCheckoutDate" label="离店日期"></el-table-column>
@@ -64,167 +64,202 @@
         @current-change="handleCurrentChange"
       ></el-pagination>
     </div>
-    
-   
-     <el-dialog title="订单详情" :visible.sync="ordertailVisible" width="80%" center>
+
+    <el-dialog title="订单详情" :visible.sync="ordertailVisible" width="90%" top="10px" center>
       <div class="boxtail">
-      <p style="height:10px;"></p>
-      <!--出行人需求信息-->
-      <el-card class="box-card" style="width:100%">
-        <div slot="header" class="clearfix">
-          <span>需求信息</span>
-        </div>
-        <div>
-          <el-form ref="form" :model="form" label-width="100px">
-            <el-form-item>
-              <el-row>
-                <el-col :span="4">订单号:123123</el-col>
-                <el-col :span="4">预定类型：机票</el-col>
-                <el-col :span="4">交通方式：方式</el-col>
-                <el-col :span="4">交通方式：方式</el-col>
-                <el-col :span="4">交通方式：方式</el-col>
-                <el-col :span="4">交通方式：方式</el-col>
-              </el-row>
-            </el-form-item>
-            <el-form-item label="机票"></el-form-item>
-          </el-form>
-        </div>
-      </el-card>
-      <p style="height:5px;"></p>
-      <!--机票信息-->
-      <el-card class="box-card" style="width:100%;">
-        <div slot="header" class="clearfix">
-          <span>机票信息</span>
-          <el-button style="float: right; padding: 3px 0" type="text" @click="clickopendialog">添加航班</el-button>
-        </div>
-        <div>
-          <el-table :data="tableData3" style="width:100%">
-            <el-table-column prop="tag" label>
-              <template slot-scope="scope">
-                <el-tag
-                  :type="scope.row.tag === '去程' ? 'primary' : 'success'"
-                  disable-transitions
-                >{{scope.row.tag}}</el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column prop="date" label="起飞时间"></el-table-column>
-            <el-table-column prop="province" label="起飞地点"></el-table-column>
-            <el-table-column prop="city" label="到达时间"></el-table-column>
-            <el-table-column prop="city" label="到达地点"></el-table-column>
-            <el-table-column prop="zip" label="航班号"></el-table-column>
-            <el-table-column prop="zip" label="座位类型"></el-table-column>
-            <el-table-column label>
-              <template slot-scope="scope">
-                <el-popover
-                  placement="top-start"
-                  title="退改签规定"
-                  width="200"
-                  trigger="hover"
-                  content="起飞前2小时扣除80%票价;起飞前2小时后扣除100%票价"
-                >
-                  <el-button slot="reference">退改签</el-button>
-                </el-popover>
-              </template>
-            </el-table-column>
-          </el-table>
-        </div>
-      </el-card>
+        <p style="height:10px;"></p>
+        <!--出行人需求信息-->
+        <el-card class="box-card" style="width:100%">
+          <div slot="header" class="clearfix">
+            <span>需求信息</span>
+          </div>
+          <div>
+            <el-form ref="form" :model="form" label-width="100px">
+              <el-form-item>
+                <el-row>
+                  <el-col :span="4">订单号:{{form.orderid}}</el-col>
+                  <el-col :span="4">预定类型：{{form.booktype}}</el-col>
+                  <el-col :span="4">交通方式：{{form.travelway}}</el-col>
+                  <el-col :span="4">交通类型：{{form.traveltype}}</el-col>
+                  <el-col :span="4">交通要求：{{form.travelothers}}</el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="4">出发日期：{{form.departdate}}</el-col>
+                  <el-col :span="4">期望时间：{{form.expectdeparttime}}</el-col>
+                  <el-col :span="4">出发城市：{{form.departcity}}</el-col>
+                  <el-col :span="4">到达日期：{{form.arrivedate}}</el-col>
+                  <el-col :span="4">期望时间：{{form.expectarrivetime}}</el-col>
+                  <el-col :span="4">到达城市：{{form.arrivecity}}</el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="4">酒店类型：{{form.hoteltype}}</el-col>
+                  <el-col :span="4">入住日期：{{form.hotelcheckindate}}</el-col>
+                  <el-col :span="4">离店日期：{{form.hotelcheckoutdate}}</el-col>
+                  <el-col :span="4">期望位置：{{form.hotellocation}}</el-col>
+                  <el-col :span="4">目的地：{{form.destination}}</el-col>
+                  <el-col :span="4">位置要求：{{form.hotelothers}}</el-col>
+                </el-row>
+              </el-form-item>
+              <el-form-item></el-form-item>
+            </el-form>
+          </div>
+        </el-card>
+        <p style="height:5px;"></p>
+        <!--机票信息-->
+        <el-card class="box-card" style="width:100%;">
+          <div slot="header" class="clearfix">
+            <span>机票信息</span>
+            <el-button style="float: right; padding: 3px 0" type="text" @click="openselectair">添加航班</el-button>
+          </div>
+          <div>
+            <el-table :data="tableDataair">
+              <el-table-column prop="DepartDate" label="起飞时间"></el-table-column>
+              <el-table-column prop="DepartCity" label="起飞地点"></el-table-column>
+              <el-table-column prop="ArriveDate" label="到达时间"></el-table-column>
+              <el-table-column prop="ArriveCity" label="到达地点"></el-table-column>
+              <el-table-column prop="FightNo" label="航班号"></el-table-column>
+              <el-table-column prop="SeatType" label="座位类型" :formatter="formatterseattype"></el-table-column>
+            </el-table>
+          </div>
+        </el-card>
 
-      <p style="height:5px;"></p>
+        <p style="height:5px;"></p>
 
-      <!--火车票信息-->
-      <el-card class="box-card" style="width:100%">
-        <div slot="header" class="clearfix">
-          <span>火车票信息</span>
-          <el-button style="float: right; padding: 3px 0" type="text" @click="clickopendialog">添加火车票</el-button>
-        </div>
-        <div>
-          <el-table :data="tableData3" style="width:100%">
-            <el-table-column prop="tag" label>
-              <template slot-scope="scope">
-                <el-tag
-                  :type="scope.row.tag === '去程' ? 'primary' : 'success'"
-                  disable-transitions
-                >{{scope.row.tag}}</el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column prop="date" label="出发时间"></el-table-column>
-            <el-table-column prop="province" label="出发地"></el-table-column>
-            <el-table-column prop="city" label="到达时间"></el-table-column>
-            <el-table-column prop="city" label="目的地"></el-table-column>
-            <el-table-column prop="zip" label="车次"></el-table-column>
-            <el-table-column prop="zip" label="座位类型"></el-table-column>
-            <el-table-column label>
-              <template slot-scope="scope">
-                <el-popover
-                  placement="top-start"
-                  title="退改签规定"
-                  width="200"
-                  trigger="hover"
-                  content="起飞前2小时扣除80%票价;起飞前2小时后扣除100%票价"
-                >
-                  <el-button slot="reference">退改签</el-button>
-                </el-popover>
-              </template>
-            </el-table-column>
-          </el-table>
-        </div>
-      </el-card>
+        <!--火车票信息-->
+        <el-card class="box-card" style="width:100%">
+          <div slot="header" class="clearfix">
+            <span>火车票信息</span>
+            <el-button
+              style="float: right; padding: 3px 0"
+              type="text"
+              @click="clickopendialog"
+            >添加火车票</el-button>
+          </div>
+          <div>
+            <el-table :data="tableData3" style="width:100%">
+              <el-table-column prop="tag" label>
+                <template slot-scope="scope">
+                  <el-tag
+                    :type="scope.row.tag === '去程' ? 'primary' : 'success'"
+                    disable-transitions
+                  >{{scope.row.tag}}</el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column prop="date" label="出发时间"></el-table-column>
+              <el-table-column prop="province" label="出发地"></el-table-column>
+              <el-table-column prop="city" label="到达时间"></el-table-column>
+              <el-table-column prop="city" label="目的地"></el-table-column>
+              <el-table-column prop="zip" label="车次"></el-table-column>
+              <el-table-column prop="zip" label="座位类型"></el-table-column>
+              <el-table-column label>
+                <template slot-scope="scope">
+                  <el-popover
+                    placement="top-start"
+                    title="退改签规定"
+                    width="200"
+                    trigger="hover"
+                    content="起飞前2小时扣除80%票价;起飞前2小时后扣除100%票价"
+                  >
+                    <el-button slot="reference">退改签</el-button>
+                  </el-popover>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+        </el-card>
 
-      <p style="height:5px;"></p>
+        <p style="height:5px;"></p>
 
-      <!--酒店信息-->
-      <el-card class="box-card" style="width:100%">
-        <div slot="header" class="clearfix">
-          <span>酒店信息</span>
-          <el-button style="float: right; padding: 3px 0" type="text" @click="clickopenhdialog">添加酒店</el-button>
-        </div>
-        <div>
-          <el-table :data="tableData2" style="width:100%">
-            <el-table-column prop="city" label="酒店名称"></el-table-column>
-            <el-table-column prop="address" label="酒店地址"></el-table-column>
-            <el-table-column prop="date" label="入住时间"></el-table-column>
-            <el-table-column prop="date1" label="离店时间"></el-table-column>
-            <el-table-column prop="fightno" label="房型"></el-table-column>
-            <el-table-column prop="count" label="间数"></el-table-column>
-            <el-table-column label>
-              <template slot-scope="scope">
-                <el-popover
-                  placement="top-start"
-                  title="酒店规定"
-                  width="200"
-                  trigger="hover"
-                  content="起飞前2小时扣除80%票价;起飞前2小时后扣除100%票价"
-                >
-                  <el-button slot="reference">酒店规定</el-button>
-                </el-popover>
-              </template>
-            </el-table-column>
-          </el-table>
-        </div>
-      </el-card>
+        <!--酒店信息-->
+        <el-card class="box-card" style="width:100%">
+          <div slot="header" class="clearfix">
+            <span>酒店信息</span>
+            <el-button
+              style="float: right; padding: 3px 0"
+              type="text"
+              @click="clickopenhdialog"
+            >添加酒店</el-button>
+          </div>
+          <div>
+            <el-table :data="tableData2" style="width:100%">
+              <el-table-column prop="city" label="酒店名称"></el-table-column>
+              <el-table-column prop="address" label="酒店地址"></el-table-column>
+              <el-table-column prop="date" label="入住时间"></el-table-column>
+              <el-table-column prop="date1" label="离店时间"></el-table-column>
+              <el-table-column prop="fightno" label="房型"></el-table-column>
+              <el-table-column prop="count" label="间数"></el-table-column>
+              <el-table-column label>
+                <template slot-scope="scope">
+                  <el-popover
+                    placement="top-start"
+                    title="酒店规定"
+                    width="200"
+                    trigger="hover"
+                    content="起飞前2小时扣除80%票价;起飞前2小时后扣除100%票价"
+                  >
+                    <el-button slot="reference">酒店规定</el-button>
+                  </el-popover>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+        </el-card>
 
-      <!--出行人信息-->
-      <p style="height:5px;"></p>
-      <el-card class="box-card" style="width:100%">
-        <div slot="header" class="clearfix">
-          <span>出行人信息</span>
+        <!--出行人信息-->
+        <p style="height:5px;"></p>
+        <el-card class="box-card" style="width:100%">
+          <div slot="header" class="clearfix">
+            <span>出行人信息</span>
+          </div>
+          <div>
+            <el-table :data="tableData3" style="width:100%">
+              <el-table-column prop="province" label="姓名"></el-table-column>
+              <el-table-column prop="zip" label="身份证号"></el-table-column>
+              <el-table-column prop="city" label="电话"></el-table-column>
+              <el-table-column prop="zip" label="票号"></el-table-column>
+            </el-table>
+          </div>
+        </el-card>
+        <p style="height:10px;"></p>
+        <el-row>
+          <el-button type="primary" @click="onSubmit">确认行程</el-button>
+        </el-row>
+      </div>
+      <!--添加航班内层弹窗-->
+      <el-dialog width="30%" title="添加航班" :visible.sync="airinnerVisible" append-to-body>
+        <el-form :model="airform">
+          <el-form-item label="出发时间" :label-width="formLabelWidth">
+            <el-date-picker v-model="airform.departdate" type="datetime" placeholder="出发时间"></el-date-picker>
+          </el-form-item>
+          <el-form-item label="出发城市" :label-width="formLabelWidth">
+            <el-input v-model="airform.departcity" auto-complete="off" placeholder="出发城市"></el-input>
+          </el-form-item>
+          <el-form-item label="到达时间" :label-width="formLabelWidth">
+            <el-date-picker v-model="airform.arrivedate" type="datetime" placeholder="到达时间"></el-date-picker>
+          </el-form-item>
+          <el-form-item label="到达城市" :label-width="formLabelWidth">
+            <el-input v-model="airform.arrivecity" auto-complete="off" placeholder="到达城市"></el-input>
+          </el-form-item>
+          <el-form-item label="航班号" :label-width="formLabelWidth">
+            <el-input v-model="airform.fightno" auto-complete="off" placeholder="航班号"></el-input>
+          </el-form-item>
+          <el-form-item label="舱位类型" :label-width="formLabelWidth">
+            <el-select v-model="airform.seattype" placeholder="请选择">
+              <el-option
+                v-for="item in seattypeoptions"
+                :key="item.value"
+                :label="item.text"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="airinnerVisible = false">取 消</el-button>
+          <el-button type="primary" @click="addselectair(form.enterpriseId)">确 定</el-button>
         </div>
-        <div>
-          <el-table :data="tableData3" style="width:100%">
-            <el-table-column prop="province" label="姓名"></el-table-column>
-            <el-table-column prop="zip" label="身份证号"></el-table-column>
-            <el-table-column prop="city" label="电话"></el-table-column>
-            <el-table-column prop="zip" label="票号"></el-table-column>
-          </el-table>
-        </div>
-      </el-card>
-      <p style="height:10px;"></p>
-      <el-row>
-        <el-button type="primary" @click="onSubmit">确认行程</el-button>
-      </el-row>
-    </div>
-     </el-dialog>
+      </el-dialog>
+    </el-dialog>
   </div>
 </template>
 
@@ -235,23 +270,52 @@ export default {
     return {
       tableData: [],
       total: 0,
-      dialogFormVisible: false,
-      dialogMFormVisible: false,
-      ordertailVisible:false,
+
+      ordertailVisible: false,
+      airinnerVisible: false,
       form: {
-        enterprisename: "",
-        enterprisecode: "",
-        contactsname: "",
-        contactsphone: "",
-        contactsemail: "",
-        enterpriseId: 0
+        orderid: "",
+        booktype: "",
+        travelway: "",
+        traveltype: "",
+        travelothers: "",
+        departdate: "",
+        expectdeparttime: "",
+        departcity: "",
+        arrivedate: "",
+        expectarrivetime: "",
+        arrivecity: "",
+        hoteltype: "",
+        hotelcheckindate: "",
+        hotelcheckoutdate: "",
+        hotellocation: "",
+        destination: "",
+        hotelothers: ""
       },
+      tableDataair: [],
+      airform: {
+        departdate: "",
+        departcity: "",
+        arrivedate: "",
+        arrivecity: "",
+        fightno: "",
+        seattype: "0"
+      },
+      seattypeoptions: [
+        {
+          value: "0",
+          text: "经济舱"
+        },
+        { value: "1", text: "公务舱" },
+        { value: "2", text: "头等舱" }
+      ],
       formLabelWidth: "100px",
       currentPage: 1
     };
   },
   methods: {
-     formatterbookingtype(row, column) {
+    //类型枚举
+    formatterbookingtype(row, column) {
       var msg = "";
       switch (parseInt(row.BookingType)) {
         case 0:
@@ -317,11 +381,44 @@ export default {
       }
       return msg;
     },
-
+    formattertraveltype(row, column) {
+      var msg = "";
+      switch (parseInt(row.TravelType)) {
+        case 0:
+          msg = "单程";
+          break;
+        case 1:
+          msg = "往返";
+          break;
+        default:
+          msg = "未知";
+          break;
+      }
+      return msg;
+    },
+    formatterseattype(row, column) {
+      var msg = "";
+      debugger;
+      switch (parseInt(row.SeatType)) {
+        case 0:
+          msg = "经济舱";
+          break;
+        case 1:
+          msg = "公务舱";
+          break;
+        case 2:
+          msg = "头等舱";
+          break;
+        default:
+          msg = "未知";
+          break;
+      }
+      return msg;
+    },
+    //订单列表查询
     handleCurrentChange(val) {
       this.onQueryClick(val);
     },
-
     onQueryClick: function(pageindex) {
       this.currentPage = pageindex;
       this.$http
@@ -355,17 +452,112 @@ export default {
           }
         );
     },
-    onClickOrderDetail(enterprise) {
+    //打开订单详情
+    onClickOrderDetail(order) {
       this.ordertailVisible = true;
-      // this.form.enterprisename = enterprise.EnterpriseName;
-      // this.form.enterprisecode = enterprise.EnterpriseCode;
-      // this.form.contactsname = enterprise.ContactsName;
-      // this.form.contactsphone = enterprise.ContactsPhone;
-      // this.form.contactsemail = enterprise.ContactsEmail;
-      // this.form.enterpriseId = enterprise.EnterpriseId;
+      this.form.orderid = order.OrderId;
+      this.form.booktype = this.formatterbookingtype(order);
+      this.form.travelway = this.formattertravelway(order);
+      this.form.traveltype = this.formattertraveltype(order);
+      this.form.travelothers = order.TravelOthers;
+
+      this.form.departdate = order.DepartDate;
+      this.form.expectdeparttime = order.ExpectDepartTime;
+      this.form.departcity = order.DepartCity;
+      this.form.arrivedate = order.ArriveDate;
+      this.form.expectarrivetime = order.ExpectArrivetime;
+      this.form.arrivecity = order.ArriveCity;
+
+      this.form.hoteltype = this.formatterhoteltype(order);
+      this.form.hotelcheckindate = order.HotelCheckinDate;
+      this.form.hotelcheckoutdate = order.HotelCheckoutDate;
+      this.form.hotellocation = this.formatterhotellocation(order);
+      this.form.destination = order.Destination;
+      this.form.hotelothers = order.HotelOthers;
+      debugger;
+      this.getselectairlist();
     },
-   
+    //添加选择航班
+    openselectair() {
+      this.airinnerVisible = true;
+      this.airform.departdate = "";
+      this.airform.arrivedate = "";
+      this.airform.departcity = "";
+      this.airform.arrivecity = "";
+      this.airform.fightno = "";
+      this.airform.seattype = "0";
+    },
+    addselectair() {
+      this.$http
+        .post(
+          "/api/Boss/AddSelectAirTicket",
+          Service.Encrypt.DataEncryption({
+            OrderId: this.form.orderid,
+            DepartDate: this.airform.departdate,
+            ArriveDate: this.airform.arrivedate,
+            DepartCity: this.airform.departcity,
+            ArriveCity: this.airform.arrivecity,
+            FightNo: this.airform.fightno,
+            SeatType: this.airform.seattype
+          })
+        )
+        .then(
+          response => {
+            if (
+              response.Data &&
+              response.Data != null &&
+              response.Data != undefined
+            ) {
+              if (response.Data > 0) {
+                this.$message("航班添加成功!");
+                this.airinnerVisible = false;
+                this.getselectairlist();
+              } else {
+                this.$message(response.Message);
+              }
+            } else {
+              this.$message(response.Message);
+            }
+          },
+          error => {
+            this.$message(error);
+            console.log(error);
+          }
+        );
+    },
+    getselectairlist() {
+      this.$http
+        .post(
+          "/api/Boss/GetSelectAirTicketList",
+          Service.Encrypt.DataEncryption({
+            OrderId: this.form.orderid
+          })
+        )
+        .then(
+          response => {
+            if (
+              response.Data &&
+              response.Data != null &&
+              response.Data != undefined
+            ) {
+              if (response.Status == 100) {
+                debugger;
+                this.tableDataair = response.Data;
+              } else {
+                this.$message(response.Message);
+              }
+            } else {
+              this.$message(response.Message);
+            }
+          },
+          error => {
+            this.$message(error);
+            console.log(error);
+          }
+        );
+    }
   },
+
   mounted() {
     this.onQueryClick(1);
   }
@@ -378,7 +570,7 @@ export default {
   width: 100%;
   overflow: auto;
 }
-.box-card{
-  text-align: center;
+.box-card {
+  /* text-align: center; */
 }
 </style>

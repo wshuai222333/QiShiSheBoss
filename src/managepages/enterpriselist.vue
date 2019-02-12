@@ -231,7 +231,7 @@ export default {
         );
     },
     onClickAdd(enterpriseId) {
-        debugger;
+       
       this.$http
         .post(
           "/api/Boss/AddEnterprise",
