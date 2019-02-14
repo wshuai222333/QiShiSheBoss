@@ -113,12 +113,14 @@
           </div>
           <div>
             <el-table :data="tableDataair">
-              <el-table-column prop="DepartDate" label="起飞时间"></el-table-column>
-              <el-table-column prop="DepartCity" label="起飞地点"></el-table-column>
-              <el-table-column prop="ArriveDate" label="到达时间"></el-table-column>
-              <el-table-column prop="ArriveCity" label="到达地点"></el-table-column>
-              <el-table-column prop="FightNo" label="航班号"></el-table-column>
+              <el-table-column prop="TravelType" label="航班类型" :formatter="formattertraveltype"></el-table-column>
+              <el-table-column prop="DepartDate" label="出发时间"></el-table-column>
+              <el-table-column prop="ArriveDate" label="返回时间"></el-table-column>
+              <el-table-column prop="Citys" label="往返城市"></el-table-column>
+              <el-table-column prop="FightNos" label="航班号"></el-table-column>
               <el-table-column prop="SeatType" label="座位类型" :formatter="formatterseattype"></el-table-column>
+              <el-table-column prop="TicketPrice" label="票面价格"></el-table-column>
+              <el-table-column prop="FuelPrice" label="燃油基建费"></el-table-column>
             </el-table>
           </div>
         </el-card>
@@ -228,20 +230,39 @@
       <!--添加航班内层弹窗-->
       <el-dialog width="30%" title="添加航班" :visible.sync="airinnerVisible" append-to-body>
         <el-form :model="airform">
-          <el-form-item label="出发时间" :label-width="formLabelWidth">
-            <el-date-picker v-model="airform.departdate" type="datetime" placeholder="出发时间"></el-date-picker>
+          <el-form-item label="航班类型" :label-width="formLabelWidth">
+            <el-select v-model="airform.traveltype" placeholder="请选择">
+              <el-option
+                v-for="item in traveltypeoptions"
+                :key="item.value"
+                :label="item.text"
+                :value="item.value"
+              ></el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="出发城市" :label-width="formLabelWidth">
             <el-input v-model="airform.departcity" auto-complete="off" placeholder="出发城市"></el-input>
           </el-form-item>
-          <el-form-item label="到达时间" :label-width="formLabelWidth">
-            <el-date-picker v-model="airform.arrivedate" type="datetime" placeholder="到达时间"></el-date-picker>
-          </el-form-item>
           <el-form-item label="到达城市" :label-width="formLabelWidth">
             <el-input v-model="airform.arrivecity" auto-complete="off" placeholder="到达城市"></el-input>
           </el-form-item>
-          <el-form-item label="航班号" :label-width="formLabelWidth">
-            <el-input v-model="airform.fightno" auto-complete="off" placeholder="航班号"></el-input>
+          <el-form-item label="去程航班号" :label-width="formLabelWidth">
+            <el-input v-model="airform.onefightno" auto-complete="off" placeholder="去程航班号"></el-input>
+          </el-form-item>
+          <el-form-item label="去程出发时间" :label-width="formLabelWidth">
+            <el-date-picker v-model="airform.onedepartdate" type="datetime" placeholder="去程出发时间"></el-date-picker>
+          </el-form-item>
+          <el-form-item label="去程到达时间" :label-width="formLabelWidth">
+            <el-date-picker v-model="airform.onearrivedate" type="datetime" placeholder="去程到达时间"></el-date-picker>
+          </el-form-item>
+          <el-form-item label="返程航班号" :label-width="formLabelWidth">
+            <el-input v-model="airform.twofightno" auto-complete="off" placeholder="返程航班号"></el-input>
+          </el-form-item>
+          <el-form-item label="返程出发时间" :label-width="formLabelWidth">
+            <el-date-picker v-model="airform.twodepartdate" type="datetime" placeholder="返程出发时间"></el-date-picker>
+          </el-form-item>
+          <el-form-item label="返程到达时间" :label-width="formLabelWidth">
+            <el-date-picker v-model="airform.twoarrivedate" type="datetime" placeholder="返程到达时间"></el-date-picker>
           </el-form-item>
           <el-form-item label="舱位类型" :label-width="formLabelWidth">
             <el-select v-model="airform.seattype" placeholder="请选择">
@@ -252,6 +273,12 @@
                 :value="item.value"
               ></el-option>
             </el-select>
+          </el-form-item>
+          <el-form-item label="票面价格" :label-width="formLabelWidth">
+            <el-input v-model="airform.ticketprice" auto-complete="off" placeholder="票面价格"></el-input>
+          </el-form-item>
+          <el-form-item label="燃油费" :label-width="formLabelWidth">
+            <el-input v-model="airform.fuelprice" auto-complete="off" placeholder="燃油费"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -294,20 +321,27 @@ export default {
       },
       tableDataair: [],
       airform: {
-        departdate: "",
+        onedepartdate: "",
+        twodepartdate: "",
         departcity: "",
-        arrivedate: "",
+        onearrivedate: "",
+        twoarrivedate: "",
         arrivecity: "",
-        fightno: "",
-        seattype: "0"
+        onefightno: "",
+        twofightno: "",
+        seattype: "0",
+        traveltype: "1",
+        ticketprice: "",
+        fuelprice: ""
       },
       seattypeoptions: [
-        {
-          value: "0",
-          text: "经济舱"
-        },
+        { value: "0", text: "经济舱" },
         { value: "1", text: "公务舱" },
         { value: "2", text: "头等舱" }
+      ],
+      traveltypeoptions: [
+        { value: "0", text: "单程" },
+        { value: "1", text: "往返" }
       ],
       formLabelWidth: "100px",
       currentPage: 1
@@ -480,12 +514,18 @@ export default {
     //添加选择航班
     openselectair() {
       this.airinnerVisible = true;
-      this.airform.departdate = "";
-      this.airform.arrivedate = "";
+      this.airform.onefightno = "";
+      this.airform.twofightno = "";
+      this.airform.onedepartdate = "";
+      this.airform.onearrivedate = "";
+      this.airform.twodepartdate = "";
+      this.airform.twoarrivedate = "";
       this.airform.departcity = "";
       this.airform.arrivecity = "";
-      this.airform.fightno = "";
       this.airform.seattype = "0";
+      this.airform.traveltype = "1";
+      this.airform.ticketprice = "";
+      this.airform.fuelprice = "";
     },
     addselectair() {
       this.$http
@@ -493,12 +533,18 @@ export default {
           "/api/Boss/AddSelectAirTicket",
           Service.Encrypt.DataEncryption({
             OrderId: this.form.orderid,
-            DepartDate: this.airform.departdate,
-            ArriveDate: this.airform.arrivedate,
+            TravelType: this.airform.traveltype,
+            OneDepartDate: this.airform.onedepartdate,
+            OneArriveDate: this.airform.onearrivedate,
+            TwoDepartDate: this.airform.twodepartdate,
+            TwoArriveDate: this.airform.twoarrivedate,
             DepartCity: this.airform.departcity,
             ArriveCity: this.airform.arrivecity,
-            FightNo: this.airform.fightno,
-            SeatType: this.airform.seattype
+            OneFightNo: this.airform.onefightno,
+            TwoFightNo: this.airform.twofightno,
+            SeatType: this.airform.seattype,
+            TicketPrice: this.airform.ticketprice,
+            FuelAirPrice: this.airform.fuelprice
           })
         )
         .then(
