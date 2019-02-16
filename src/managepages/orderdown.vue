@@ -79,6 +79,7 @@
               <el-form-item>
                 <el-row>
                   <el-col :span="4">订单号:{{form.orderid}}</el-col>
+                  <el-col :span="4">创建时间:{{form.createtime}}</el-col>
                   <el-col :span="4">预定类型：{{form.booktype}}</el-col>
                   <el-col :span="4">行程方式：{{form.travelway}}</el-col>
                   <el-col :span="4">行程类型：{{form.traveltype}}</el-col>
