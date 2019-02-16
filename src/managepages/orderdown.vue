@@ -33,9 +33,10 @@
         <el-table-column prop="HotelLocation" label="期待位置" :formatter="formatterhotellocation"></el-table-column>
         <el-table-column prop="Status" label="订单状态" width="120">
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.Status==0">等待确认需求</el-tag>
-            <el-tag type="danger" v-if="scope.row.Status==1">等待员工确认</el-tag>
-            <el-tag type="success" v-if="scope.row.Status==3">确认完成</el-tag>
+            <el-tag v-if="scope.row.Status==0">行程生成中</el-tag>
+            <el-tag type="danger" v-if="scope.row.Status==1">待用户确认</el-tag>
+            <el-tag type="warning" v-if="scope.row.Status==3">行程采购中</el-tag>
+            <el-tag type="success" v-if="scope.row.Status==5">已完成</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="100">
@@ -104,6 +105,20 @@
             </el-form>
           </div>
         </el-card>
+        
+         <!--房间信息-->
+        <p style="height:5px;"></p>
+        <el-card class="box-card" style="width:100%">
+          <div slot="header" class="clearfix">
+            <span>房间信息</span>
+          </div>
+          <div>
+            <el-table :data="tableDataRooms" style="width:100%">
+              <el-table-column prop="ApartmentType" label="房间类型" :formatter="formatterroomtype"></el-table-column>
+              <el-table-column prop="Apartmentcount" label="房间数量"></el-table-column>
+           </el-table>
+         </div>
+        </el-card>
 
         <!--出行人信息-->
         <p style="height:5px;"></p>
@@ -112,10 +127,9 @@
             <span>出行人信息</span>
           </div>
           <div>
-            <el-table :data="tableData3" style="width:100%">
-              <el-table-column prop="province" label="姓名"></el-table-column>
-              <el-table-column prop="zip" label="身份证号"></el-table-column>
-              <el-table-column prop="city" label="电话"></el-table-column>
+            <el-table :data="tableDataPass" style="width:100%">
+              <el-table-column prop="PassengerName" label="姓名"></el-table-column>
+              <el-table-column prop="PassengerCardNo" label="证件号"></el-table-column>
               <el-table-column prop="zip" label="票号"></el-table-column>
             </el-table>
           </div>
@@ -192,7 +206,8 @@
 
         <p style="height:10px;"></p>
         <el-row>
-          <el-button type="primary" @click="onSubmit">确认行程</el-button>
+          <el-button type="primary" v-if="form.status=='0'" @click="updateDemandOrderStatus(1)">确认可选行程</el-button>
+          <el-button type="primary" v-if="form.status=='3'" @click="updateDemandOrderStatus(5)">确认出票行程</el-button>
         </el-row>
       </div>
       <!--添加航班内层弹窗-->
@@ -361,7 +376,10 @@ export default {
         hotelcheckoutdate: "",
         hotellocation: "",
         destination: "",
-        hotelothers: ""
+        hotelothers: "",
+
+        status:"",
+        createtime:"",
       },
       tableDataair: [],
       airform: {
@@ -398,6 +416,9 @@ export default {
         hotelAddress: "",
         totalPrice: ""
       },
+      tableDataPass:[],
+      tableDataHotels:[],
+      tableDataRooms:[],
       seattypeoptions: [
         { value: "0", text: "经济舱" },
         { value: "1", text: "公务舱" },
@@ -505,7 +526,6 @@ export default {
     },
     formatterseattype(row, column) {
       var msg = "";
-      debugger;
       switch (parseInt(row.SeatType)) {
         case 0:
           msg = "经济舱";
@@ -545,6 +565,27 @@ export default {
           break;
         case 6:
           msg = "商务座";
+          break;
+        default:
+          msg = "未知";
+          break;
+      }
+      return msg;
+    },
+    formatterroomtype(row, column) {
+      var msg = "";
+      switch (parseInt(row.ApartmentType)) {
+        case 0:
+          msg = "双人标间";
+          break;
+        case 1:
+          msg = "商务大床";
+          break;
+        case 2:
+          msg = "豪华大床";
+          break;
+        case 3:
+          msg = "豪华套件";
           break;
         default:
           msg = "未知";
@@ -612,6 +653,11 @@ export default {
       this.form.destination = order.Destination;
       this.form.hotelothers = order.HotelOthers;
       debugger;
+      this.form.status = order.Status;
+      this.form.createtime = order.CreateTime;
+      
+      this.getGetOrderApartmentList();
+      this.getOrderPassengerlist() ;
       this.getselectairlist();
       this.getselecttrainlist();
       this.getselecthotellist();
@@ -692,7 +738,7 @@ export default {
               response.Data != undefined
             ) {
               if (response.Status == 100) {
-                debugger;
+                
                 this.tableDataair = response.Data;
               } else {
                 this.$message(response.Message);
@@ -781,7 +827,7 @@ export default {
               response.Data != undefined
             ) {
               if (response.Status == 100) {
-                debugger;
+                
                 this.tableDataTrain = response.Data;
               } else {
                 this.$message(response.Message);
@@ -854,7 +900,7 @@ export default {
               response.Data != undefined
             ) {
               if (response.Status == 100) {
-                debugger;
+                
                 this.tableDataHotel = response.Data;
               } else {
                 this.$message(response.Message);
@@ -886,7 +932,71 @@ export default {
             ) {
               if (response.Status == 100) {
                 debugger;
-                this.tableDataHotel = response.Data;
+                this.tableDataPass = response.Data;
+              } else {
+                this.$message(response.Message);
+              }
+            } else {
+              this.$message(response.Message);
+            }
+          },
+          error => {
+            this.$message(error);
+            console.log(error);
+          }
+        );
+    },
+    getGetOrderApartmentList() {
+      this.$http
+        .post(
+          "/api/Boss/GetOrderApartmentList",
+          Service.Encrypt.DataEncryption({
+            OrderId: this.form.orderid
+          })
+        )
+        .then(
+          response => {
+            if (
+              response.Data &&
+              response.Data != null &&
+              response.Data != undefined
+            ) {
+              if (response.Status == 100) {
+                debugger;
+                this.tableDataRooms = response.Data;
+              } else {
+                this.$message(response.Message);
+              }
+            } else {
+              this.$message(response.Message);
+            }
+          },
+          error => {
+            this.$message(error);
+            console.log(error);
+          }
+        );
+    },
+    updateDemandOrderStatus(status){
+       this.$http
+        .post(
+          "/api/Boss/UpdateDemandOrderStatus",
+          Service.Encrypt.DataEncryption({
+            OrderId: this.form.orderid,
+            Status:status
+          })
+        )
+        .then(
+          response => {
+            if (
+              response.Data &&
+              response.Data != null &&
+              response.Data != undefined
+            ) {
+              if (response.Data > 0) {
+                this.$message("行程确认成功等待客户确认!");
+                this.ordertailVisible = false;
+                this.onQueryClick(1);
               } else {
                 this.$message(response.Message);
               }
