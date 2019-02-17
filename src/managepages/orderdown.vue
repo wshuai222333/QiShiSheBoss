@@ -106,14 +106,56 @@
             </el-form>
           </div>
         </el-card>
-        
-         <!--房间信息-->
+          <!--机票信息-->
+        <el-card class="box-card" style="width:100%">
+          <div slot="header" class="clearfix">
+            <span>机票信息</span>
+          </div>
+          <div>
+            <el-table :data="tableDataairtop">
+              <el-table-column prop="TravelType" label="行程类型" :formatter="formattertraveltype"></el-table-column>
+              <el-table-column prop="DepartDate" label="出发时间"></el-table-column>
+              <el-table-column prop="ArriveDate" label="返回时间"></el-table-column>
+              <el-table-column prop="Citys" label="往返城市"></el-table-column>
+              <el-table-column prop="FightNos" label="航班号"></el-table-column>
+              <el-table-column prop="SeatType" label="座位类型" :formatter="formatterseattype"></el-table-column>
+              <el-table-column prop="TicketPrice" label="票面价格"></el-table-column>
+              <el-table-column prop="FuelPrice" label="燃油基建费"></el-table-column>
+            </el-table>
+          </div>
+       </el-card>
+
+      <p style="height:5px;"></p>
+
+        <!--火车票选择信息-->
+        <el-card class="box-card" style="width:100%">
+          <div slot="header" class="clearfix">
+            <span>火车票信息</span>
+           </div>
+          <div>
+            <el-table :data="tableDataTrainTop">
+              <el-table-column prop="TravelType" label="行程类型" :formatter="formattertraveltype"></el-table-column>
+              <el-table-column prop="DepartDate" label="出发时间"></el-table-column>
+              <el-table-column prop="ArriveDate" label="返回时间"></el-table-column>
+              <el-table-column prop="Citys" label="往返城市"></el-table-column>
+              <el-table-column prop="TrainNos" label="车次"></el-table-column>
+              <el-table-column prop="SeatType" label="座位类型" :formatter="formattertrainseattype"></el-table-column>
+              <el-table-column prop="TicketPrice" label="票面价"></el-table-column>
+            </el-table>
+          </div>
+        </el-card>
+         <!--酒店信息-->
         <p style="height:5px;"></p>
         <el-card class="box-card" style="width:100%">
           <div slot="header" class="clearfix">
-            <span>房间信息</span>
+            <span>酒店信息</span>
           </div>
           <div>
+            <el-table :data="tableDataHotelTop">
+              <el-table-column prop="HotelName" label="酒店名称"></el-table-column>
+              <el-table-column prop="HotelAddress" label="酒店地址"></el-table-column>
+              <el-table-column prop="TotalPrice" label="房间总价"></el-table-column>
+            </el-table>
             <el-table :data="tableDataRooms" style="width:100%">
               <el-table-column prop="ApartmentType" label="房间类型" :formatter="formatterroomtype"></el-table-column>
               <el-table-column prop="Apartmentcount" label="房间数量"></el-table-column>
@@ -139,7 +181,7 @@
         <p style="height:5px;"></p>
         <p style="border-bottom:solid 2px #ccc;"></p>
 
-        <!--机票信息-->
+        <!--机票选择信息-->
         <el-card class="box-card" style="width:100%;">
           <div slot="header" class="clearfix">
             <span>机票选择信息</span>
@@ -161,7 +203,7 @@
 
         <p style="height:5px;"></p>
 
-        <!--火车票信息-->
+        <!--火车票选择信息-->
         <el-card class="box-card" style="width:100%">
           <div slot="header" class="clearfix">
             <span>火车票选择信息</span>
@@ -186,7 +228,7 @@
 
         <p style="height:5px;"></p>
 
-        <!--酒店信息-->
+        <!--酒店选择信息-->
         <el-card class="box-card" style="width:100%">
           <div slot="header" class="clearfix">
             <span>酒店选择信息</span>
@@ -439,7 +481,10 @@ export default {
         { value: "1", text: "往返" }
       ],
       formLabelWidth: "100px",
-      currentPage: 1
+      currentPage: 1,
+      tableDataairtop:[],
+      tableDataHotelTop:[],
+      tableDataTrainTop:[]
     };
   },
   methods: {
@@ -659,9 +704,14 @@ export default {
       
       this.getGetOrderApartmentList();
       this.getOrderPassengerlist() ;
+
       this.getselectairlist();
       this.getselecttrainlist();
       this.getselecthotellist();
+
+      this.getGetOrderAirTicketList();
+      this.getGetOrderHotelList();
+      this.getGetOrderTrainTicketList();
     },
     //添加选择航班
     openselectair() {
@@ -1010,7 +1060,100 @@ export default {
             console.log(error);
           }
         );
-    }
+    },
+    getGetOrderAirTicketList() {
+      this.$http
+        .post(
+          "/api/Boss/GetOrderAirTicketList",
+          Service.Encrypt.DataEncryption({
+            OrderId: this.form.orderid
+          })
+        )
+        .then(
+          response => {
+            if (
+              response.Data &&
+              response.Data != null &&
+              response.Data != undefined
+            ) {
+              if (response.Status == 100) {
+                debugger;
+                this.tableDataairtop = response.Data;
+              } else {
+                this.$message(response.Message);
+              }
+            } else {
+              this.$message(response.Message);
+            }
+          },
+          error => {
+            this.$message(error);
+            console.log(error);
+          }
+        );
+    },
+    getGetOrderTrainTicketList() {
+      this.$http
+        .post(
+          "/api/Boss/GetOrderTrainTicketList",
+          Service.Encrypt.DataEncryption({
+            OrderId: this.form.orderid
+          })
+        )
+        .then(
+          response => {
+            if (
+              response.Data &&
+              response.Data != null &&
+              response.Data != undefined
+            ) {
+              if (response.Status == 100) {
+                debugger;
+                this.tableDataTrainTop = response.Data;
+              } else {
+                this.$message(response.Message);
+              }
+            } else {
+              this.$message(response.Message);
+            }
+          },
+          error => {
+            this.$message(error);
+            console.log(error);
+          }
+        );
+    },
+     getGetOrderHotelList() {
+      this.$http
+        .post(
+          "/api/Boss/GetOrderHotelList",
+          Service.Encrypt.DataEncryption({
+            OrderId: this.form.orderid
+          })
+        )
+        .then(
+          response => {
+            if (
+              response.Data &&
+              response.Data != null &&
+              response.Data != undefined
+            ) {
+              if (response.Status == 100) {
+                debugger;
+                this.tableDataHotelTop = response.Data;
+              } else {
+                this.$message(response.Message);
+              }
+            } else {
+              this.$message(response.Message);
+            }
+          },
+          error => {
+            this.$message(error);
+            console.log(error);
+          }
+        );
+    },
   },
   mounted() {
     this.onQueryClick(1);

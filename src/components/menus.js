@@ -34,12 +34,6 @@ const menus = [{
                 name: 'orderdown',
                 label: '订单管理',
 
-            },
-            {
-                id: 'orderdetail',
-                name: 'orderdetail',
-                label: '订单详情',
-
             }
         ]
     },
