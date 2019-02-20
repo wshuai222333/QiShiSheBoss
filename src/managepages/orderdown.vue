@@ -106,7 +106,7 @@
             </el-form>
           </div>
         </el-card>
-          <!--机票信息-->
+        <!--机票信息-->
         <el-card class="box-card" style="width:100%">
           <div slot="header" class="clearfix">
             <span>机票信息</span>
@@ -121,17 +121,30 @@
               <el-table-column prop="SeatType" label="座位类型" :formatter="formatterseattype"></el-table-column>
               <el-table-column prop="TicketPrice" label="票面价格"></el-table-column>
               <el-table-column prop="FuelPrice" label="燃油基建费"></el-table-column>
+              <el-table-column label>
+                <template slot-scope="scope">
+                  <el-popover
+                    placement="top-start"
+                    title="退改签规定"
+                    width="200"
+                    trigger="hover"
+                    :content="scope.row.AirTicketRules"
+                  >
+                    <el-button slot="reference">退改签</el-button>
+                  </el-popover>
+                </template>
+              </el-table-column>
             </el-table>
           </div>
-       </el-card>
+        </el-card>
 
-      <p style="height:5px;"></p>
+        <p style="height:5px;"></p>
 
         <!--火车票选择信息-->
         <el-card class="box-card" style="width:100%">
           <div slot="header" class="clearfix">
             <span>火车票信息</span>
-           </div>
+          </div>
           <div>
             <el-table :data="tableDataTrainTop">
               <el-table-column prop="TravelType" label="行程类型" :formatter="formattertraveltype"></el-table-column>
@@ -141,10 +154,23 @@
               <el-table-column prop="TrainNos" label="车次"></el-table-column>
               <el-table-column prop="SeatType" label="座位类型" :formatter="formattertrainseattype"></el-table-column>
               <el-table-column prop="TicketPrice" label="票面价"></el-table-column>
+              <el-table-column label>
+                <template slot-scope="scope">
+                  <el-popover
+                    placement="top-start"
+                    title="退改签规定"
+                    width="200"
+                    trigger="hover"
+                    :content="scope.row.TrainTicketRules"
+                  >
+                    <el-button slot="reference">退改签</el-button>
+                  </el-popover>
+                </template>
+              </el-table-column>
             </el-table>
           </div>
         </el-card>
-         <!--酒店信息-->
+        <!--酒店信息-->
         <p style="height:5px;"></p>
         <el-card class="box-card" style="width:100%">
           <div slot="header" class="clearfix">
@@ -155,12 +181,25 @@
               <el-table-column prop="HotelName" label="酒店名称"></el-table-column>
               <el-table-column prop="HotelAddress" label="酒店地址"></el-table-column>
               <el-table-column prop="TotalPrice" label="房间总价"></el-table-column>
+              <el-table-column label>
+                <template slot-scope="scope">
+                  <el-popover
+                    placement="top-start"
+                    title="酒店规定"
+                    width="200"
+                    trigger="hover"
+                    :content="scope.row.HotelRules"
+                  >
+                    <el-button slot="reference">退改签</el-button>
+                  </el-popover>
+                </template>
+              </el-table-column>
             </el-table>
             <el-table :data="tableDataRooms" style="width:100%">
               <el-table-column prop="ApartmentType" label="房间类型" :formatter="formatterroomtype"></el-table-column>
               <el-table-column prop="Apartmentcount" label="房间数量"></el-table-column>
-           </el-table>
-         </div>
+            </el-table>
+          </div>
         </el-card>
 
         <!--出行人信息-->
@@ -197,6 +236,19 @@
               <el-table-column prop="SeatType" label="座位类型" :formatter="formatterseattype"></el-table-column>
               <el-table-column prop="TicketPrice" label="票面价格"></el-table-column>
               <el-table-column prop="FuelPrice" label="燃油基建费"></el-table-column>
+              <el-table-column label>
+                <template slot-scope="scope">
+                  <el-popover
+                    placement="top-start"
+                    title="退改签规定"
+                    width="200"
+                    trigger="hover"
+                    :content="scope.row.AirTicketRules"
+                  >
+                    <el-button slot="reference">退改签</el-button>
+                  </el-popover>
+                </template>
+              </el-table-column>
             </el-table>
           </div>
         </el-card>
@@ -222,6 +274,19 @@
               <el-table-column prop="TrainNos" label="车次"></el-table-column>
               <el-table-column prop="SeatType" label="座位类型" :formatter="formattertrainseattype"></el-table-column>
               <el-table-column prop="TicketPrice" label="票面价"></el-table-column>
+              <el-table-column label>
+                <template slot-scope="scope">
+                  <el-popover
+                    placement="top-start"
+                    title="退改签规定"
+                    width="200"
+                    trigger="hover"
+                    :content="scope.row.TrainTicketRules"
+                  >
+                    <el-button slot="reference">退改签</el-button>
+                  </el-popover>
+                </template>
+              </el-table-column>
             </el-table>
           </div>
         </el-card>
@@ -243,14 +308,35 @@
               <el-table-column prop="HotelName" label="酒店名称"></el-table-column>
               <el-table-column prop="HotelAddress" label="酒店地址"></el-table-column>
               <el-table-column prop="TotalPrice" label="房间总价"></el-table-column>
+              <el-table-column label>
+                <template slot-scope="scope">
+                  <el-popover
+                    placement="top-start"
+                    title="酒店规定"
+                    width="200"
+                    trigger="hover"
+                    :content="scope.row.HotelRules"
+                  >
+                    <el-button slot="reference">退改签</el-button>
+                  </el-popover>
+                </template>
+              </el-table-column>
             </el-table>
           </div>
         </el-card>
 
         <p style="height:10px;"></p>
         <el-row>
-          <el-button type="primary" v-if="form.status=='0'" @click="updateDemandOrderStatus(1)">确认可选行程</el-button>
-          <el-button type="primary" v-if="form.status=='3'" @click="updateDemandOrderStatus(5)">确认出票行程</el-button>
+          <el-button
+            type="primary"
+            v-if="form.status=='0'"
+            @click="updateDemandOrderStatus(1)"
+          >确认可选行程</el-button>
+          <el-button
+            type="primary"
+            v-if="form.status=='3'"
+            @click="updateDemandOrderStatus(5)"
+          >确认出票行程</el-button>
         </el-row>
       </div>
       <!--添加航班内层弹窗-->
@@ -305,6 +391,15 @@
           </el-form-item>
           <el-form-item label="燃油费" :label-width="formLabelWidth">
             <el-input v-model="airform.fuelprice" auto-complete="off" placeholder="燃油费"></el-input>
+          </el-form-item>
+          <el-form-item label="退改签规定" :label-width="formLabelWidth">
+            <el-input
+              v-model="airform.airTicketRules"
+              auto-complete="off"
+              placeholder="退改签规定"
+              type="textarea"
+              :rows="2"
+            ></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -362,6 +457,15 @@
           <el-form-item label="票面价格" :label-width="formLabelWidth">
             <el-input v-model="trainform.ticketprice" auto-complete="off" placeholder="票面价格"></el-input>
           </el-form-item>
+          <el-form-item label="退改签规定" :label-width="formLabelWidth">
+            <el-input
+              v-model="trainform.trainTicketRules"
+              auto-complete="off"
+              placeholder="退改签规定"
+              type="textarea"
+              :rows="2"
+            ></el-input>
+          </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="traininnerVisible = false">取 消</el-button>
@@ -379,6 +483,15 @@
           </el-form-item>
           <el-form-item label="房间总价" :label-width="formLabelWidth">
             <el-input v-model="hotelform.totalPrice" auto-complete="off" placeholder="房间总价"></el-input>
+          </el-form-item>
+          <el-form-item label="酒店规定" :label-width="formLabelWidth">
+            <el-input
+              v-model="hotelform.hotelRules"
+              auto-complete="off"
+              placeholder="酒店规定"
+              type="textarea"
+              :rows="2"
+            ></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -421,8 +534,8 @@ export default {
         destination: "",
         hotelothers: "",
 
-        status:"",
-        createtime:"",
+        status: "",
+        createtime: ""
       },
       tableDataair: [],
       airform: {
@@ -437,7 +550,8 @@ export default {
         seattype: "0",
         traveltype: "1",
         ticketprice: "",
-        fuelprice: ""
+        fuelprice: "",
+        airTicketRules: ""
       },
       tableDataTrain: [],
       trainform: {
@@ -451,7 +565,8 @@ export default {
         twotrainno: "",
         seattype: "0",
         traveltype: "4",
-        ticketprice: ""
+        ticketprice: "",
+        trainTicketRules: ""
       },
       tableDataHotel: [],
       hotelform: {
@@ -459,9 +574,9 @@ export default {
         hotelAddress: "",
         totalPrice: ""
       },
-      tableDataPass:[],
-      tableDataHotels:[],
-      tableDataRooms:[],
+      tableDataPass: [],
+      tableDataHotels: [],
+      tableDataRooms: [],
       seattypeoptions: [
         { value: "0", text: "经济舱" },
         { value: "1", text: "公务舱" },
@@ -482,9 +597,9 @@ export default {
       ],
       formLabelWidth: "100px",
       currentPage: 1,
-      tableDataairtop:[],
-      tableDataHotelTop:[],
-      tableDataTrainTop:[]
+      tableDataairtop: [],
+      tableDataHotelTop: [],
+      tableDataTrainTop: []
     };
   },
   methods: {
@@ -698,12 +813,12 @@ export default {
       this.form.hotellocation = this.formatterhotellocation(order);
       this.form.destination = order.Destination;
       this.form.hotelothers = order.HotelOthers;
-      debugger;
+
       this.form.status = order.Status;
       this.form.createtime = order.CreateTime;
-      
+
       this.getGetOrderApartmentList();
-      this.getOrderPassengerlist() ;
+      this.getOrderPassengerlist();
 
       this.getselectairlist();
       this.getselecttrainlist();
@@ -746,7 +861,8 @@ export default {
             TwoFightNo: this.airform.twofightno,
             SeatType: this.airform.seattype,
             TicketPrice: this.airform.ticketprice,
-            FuelAirPrice: this.airform.fuelprice
+            FuelAirPrice: this.airform.fuelprice,
+            AirTicketRules: this.airform.airTicketRules
           })
         )
         .then(
@@ -789,7 +905,6 @@ export default {
               response.Data != undefined
             ) {
               if (response.Status == 100) {
-                
                 this.tableDataair = response.Data;
               } else {
                 this.$message(response.Message);
@@ -835,7 +950,8 @@ export default {
             OneTrainNo: this.trainform.onetrainno,
             TwoTrainNo: this.trainform.twotrainno,
             SeatType: this.trainform.seattype,
-            TicketPrice: this.trainform.ticketprice
+            TicketPrice: this.trainform.ticketprice,
+            TrainTicketRules: this.trainform.trainTicketRules
           })
         )
         .then(
@@ -878,7 +994,6 @@ export default {
               response.Data != undefined
             ) {
               if (response.Status == 100) {
-                
                 this.tableDataTrain = response.Data;
               } else {
                 this.$message(response.Message);
@@ -908,7 +1023,8 @@ export default {
             OrderId: this.form.orderid,
             HotelName: this.hotelform.hotelName,
             HotelAddress: this.hotelform.hotelAddress,
-            TotalPrice: this.hotelform.totalPrice
+            TotalPrice: this.hotelform.totalPrice,
+            HotelRules: this.hotelform.hotelRules
           })
         )
         .then(
@@ -951,7 +1067,6 @@ export default {
               response.Data != undefined
             ) {
               if (response.Status == 100) {
-                
                 this.tableDataHotel = response.Data;
               } else {
                 this.$message(response.Message);
@@ -982,7 +1097,6 @@ export default {
               response.Data != undefined
             ) {
               if (response.Status == 100) {
-                debugger;
                 this.tableDataPass = response.Data;
               } else {
                 this.$message(response.Message);
@@ -1013,7 +1127,6 @@ export default {
               response.Data != undefined
             ) {
               if (response.Status == 100) {
-                debugger;
                 this.tableDataRooms = response.Data;
               } else {
                 this.$message(response.Message);
@@ -1028,13 +1141,13 @@ export default {
           }
         );
     },
-    updateDemandOrderStatus(status){
-       this.$http
+    updateDemandOrderStatus(status) {
+      this.$http
         .post(
           "/api/Boss/UpdateDemandOrderStatus",
           Service.Encrypt.DataEncryption({
             OrderId: this.form.orderid,
-            Status:status
+            Status: status
           })
         )
         .then(
@@ -1045,7 +1158,7 @@ export default {
               response.Data != undefined
             ) {
               if (response.Data > 0) {
-                this.$message("行程确认成功等待客户确认!");
+                this.$message("行程确认成功!");
                 this.ordertailVisible = false;
                 this.onQueryClick(1);
               } else {
@@ -1077,7 +1190,6 @@ export default {
               response.Data != undefined
             ) {
               if (response.Status == 100) {
-                debugger;
                 this.tableDataairtop = response.Data;
               } else {
                 this.$message(response.Message);
@@ -1108,7 +1220,6 @@ export default {
               response.Data != undefined
             ) {
               if (response.Status == 100) {
-                debugger;
                 this.tableDataTrainTop = response.Data;
               } else {
                 this.$message(response.Message);
@@ -1123,7 +1234,7 @@ export default {
           }
         );
     },
-     getGetOrderHotelList() {
+    getGetOrderHotelList() {
       this.$http
         .post(
           "/api/Boss/GetOrderHotelList",
@@ -1153,7 +1264,7 @@ export default {
             console.log(error);
           }
         );
-    },
+    }
   },
   mounted() {
     this.onQueryClick(1);
