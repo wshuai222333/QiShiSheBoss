@@ -66,46 +66,50 @@
       ></el-pagination>
     </div>
 
-    <el-dialog title="订单详情" :visible.sync="ordertailVisible" width="90%" top="10px" center>
+    <el-dialog title="订单详情" :visible.sync="ordertailVisible" width="95%" top="10px" center>
+      <p style="height:10px;"></p>
+      <!--出行人需求信息-->
+      <!-- <el-card class="box-card" style="width:80%;position:fixed;z-index:9999"> -->
+      <el-card class="box-move">
+        <div slot="header" class="clearfix">
+          <span>需求信息</span>
+        </div>
+        <div>
+          <el-form ref="form" :model="form" label-width="100px">
+            <el-form-item>
+              <el-row>
+                <el-col :span="4">订单号:{{form.orderid}}</el-col>
+                <el-col :span="4">创建时间:{{form.createtime}}</el-col>
+                <el-col :span="4">预定类型：{{form.booktype}}</el-col>
+                <el-col :span="4">行程方式：{{form.travelway}}</el-col>
+                <el-col :span="4">行程类型：{{form.traveltype}}</el-col>
+                <el-col :span="4">行程要求：{{form.travelothers}}</el-col>
+              </el-row>
+              <el-row></el-row>
+              <el-row>
+                <el-col :span="4">出发日期：{{form.departdate}}</el-col>
+                <el-col :span="4">期望时间：{{form.expectdeparttime}}</el-col>
+                <el-col :span="4">出发城市：{{form.departcity}}</el-col>
+                <el-col :span="4">返程日期：{{form.arrivedate}}</el-col>
+                <el-col :span="4">期望时间：{{form.expectarrivetime}}</el-col>
+                <el-col :span="4">到达城市：{{form.arrivecity}}</el-col>
+              </el-row>
+              <el-row></el-row>
+              <el-row>
+                <el-col :span="4">酒店类型：{{form.hoteltype}}</el-col>
+                <el-col :span="4">入住日期：{{form.hotelcheckindate}}</el-col>
+                <el-col :span="4">离店日期：{{form.hotelcheckoutdate}}</el-col>
+                <el-col :span="4">期望位置：{{form.hotellocation}}</el-col>
+                <el-col :span="4">目的地：{{form.destination}}</el-col>
+                <el-col :span="4">位置要求：{{form.hotelothers}}</el-col>
+              </el-row>
+              <el-row></el-row>
+            </el-form-item>
+            <el-form-item></el-form-item>
+          </el-form>
+        </div>
+      </el-card>
       <div class="boxtail">
-        <p style="height:10px;"></p>
-        <!--出行人需求信息-->
-        <el-card class="box-card" style="width:100%">
-          <div slot="header" class="clearfix">
-            <span>需求信息</span>
-          </div>
-          <div>
-            <el-form ref="form" :model="form" label-width="100px">
-              <el-form-item>
-                <el-row>
-                  <el-col :span="4">订单号:{{form.orderid}}</el-col>
-                  <el-col :span="4">创建时间:{{form.createtime}}</el-col>
-                  <el-col :span="4">预定类型：{{form.booktype}}</el-col>
-                  <el-col :span="4">行程方式：{{form.travelway}}</el-col>
-                  <el-col :span="4">行程类型：{{form.traveltype}}</el-col>
-                  <el-col :span="4">行程要求：{{form.travelothers}}</el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="4">出发日期：{{form.departdate}}</el-col>
-                  <el-col :span="4">期望时间：{{form.expectdeparttime}}</el-col>
-                  <el-col :span="4">出发城市：{{form.departcity}}</el-col>
-                  <el-col :span="4">到达日期：{{form.arrivedate}}</el-col>
-                  <el-col :span="4">期望时间：{{form.expectarrivetime}}</el-col>
-                  <el-col :span="4">到达城市：{{form.arrivecity}}</el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="4">酒店类型：{{form.hoteltype}}</el-col>
-                  <el-col :span="4">入住日期：{{form.hotelcheckindate}}</el-col>
-                  <el-col :span="4">离店日期：{{form.hotelcheckoutdate}}</el-col>
-                  <el-col :span="4">期望位置：{{form.hotellocation}}</el-col>
-                  <el-col :span="4">目的地：{{form.destination}}</el-col>
-                  <el-col :span="4">位置要求：{{form.hotelothers}}</el-col>
-                </el-row>
-              </el-form-item>
-              <el-form-item></el-form-item>
-            </el-form>
-          </div>
-        </el-card>
         <!--机票信息-->
         <el-card class="box-card" style="width:100%">
           <div slot="header" class="clearfix">
@@ -511,10 +515,14 @@ export default {
       tableData: [],
       total: 0,
 
+      isFixed: false,
+      offsetTop: 0,
+
       ordertailVisible: false,
       airinnerVisible: false,
       traininnerVisible: false,
       hotelinnerVisible: false,
+
       form: {
         orderid: "",
         booktype: "",
@@ -1250,7 +1258,6 @@ export default {
               response.Data != undefined
             ) {
               if (response.Status == 100) {
-                debugger;
                 this.tableDataHotelTop = response.Data;
               } else {
                 this.$message(response.Message);
@@ -1278,7 +1285,37 @@ export default {
   width: 100%;
   overflow: auto;
 }
+.box-move {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  height: 50%;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.3);
+  -webkit-pointer-events: none;
+  -moz-pointer-events: none;
+  -ms-pointer-events: none;
+  -o-pointer-events: none;
+  pointer-events: none;
+  width:100%;
+}
+.boxtail {
+}
+
 .box-card {
   /* text-align: center; */
+}
+#nav-fixed {
+  background: rgba(255, 255, 255, 0.8);
+  border: 0;
+  border-radius: 10px;
+}
+.nav_fixed {
+  position: fixed;
+  z-index: 2;
+  top: 0;
+  width: 77.2%;
 }
 </style>

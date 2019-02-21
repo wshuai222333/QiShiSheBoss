@@ -82,10 +82,10 @@
     <el-dialog title="添加员工" :visible.sync="dialogFormVisible">
       <el-form :model="form" :rules="rules" ref="form">
         <el-form-item label="选择企业" :label-width="formLabelWidth" prop="enterprise">
-          <el-select v-model="form.enterprise" placeholder="请选择">
+          <el-select value-key="EnterpriseId" v-model="form.enterprise" placeholder="请选择">
             <el-option
               v-for="item in enterpriselist"
-              :key="item"
+              :key="item.EnterpriseId"
               :label="item.EnterpriseName"
               :value="item"
             ></el-option>
@@ -169,7 +169,7 @@ export default {
       dialogMFormVisible: false,
       dialogIFormVisible: false,
       form: {
-        enterprise: null,
+        enterprise: {},
         enterpriseid: 0,
         enterprisename: "",
         staffname: "",
@@ -363,7 +363,6 @@ export default {
             this.form.enterpriseid = this.form.enterprise.EnterpriseId;
             this.form.enterprisename = this.form.enterprise.EnterpriseName;
           }
-
           this.$http
             .post(
               "/api/Boss/AddStaff",
