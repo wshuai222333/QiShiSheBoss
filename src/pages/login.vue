@@ -88,7 +88,7 @@ export default {
   }
 };
 </script>
-<style type="text/css">
+<style type="text/css" scoped>
 .m-list-group {
   border-radius: 3px;
   padding: 0;

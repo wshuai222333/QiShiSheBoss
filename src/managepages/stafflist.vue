@@ -472,7 +472,7 @@ export default {
 </script>
 
 
-<style>
+<style scoped>
 .box-body {
   width: 100%;
   overflow: auto;
