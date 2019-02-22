@@ -42,18 +42,6 @@
         <el-table-column label="操作" width="100">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="onClickOrderDetail(scope.row)">订单详情</el-button>
-            <!-- <el-button
-              type="text"
-              size="small"
-              v-if="scope.row.Status==1"
-              @click="onClickModifyState(scope.row.BackgroundUserId,0)"
-            >停用</el-button>
-            <el-button
-              type="text"
-              size="small"
-              v-if="scope.row.Status==0"
-              @click="onClickModifyState(scope.row.BackgroundUserId,1)"
-            >启用</el-button>-->
           </template>
         </el-table-column>
       </el-table>
@@ -253,6 +241,11 @@
                   </el-popover>
                 </template>
               </el-table-column>
+              <el-table-column label="操作" width="50">
+                <template slot-scope="scope">
+                  <el-button type="text" size="small" @click="deleteSelectAirTicket(scope.row)">删除</el-button>
+                </template>
+              </el-table-column>
             </el-table>
           </div>
         </el-card>
@@ -291,6 +284,11 @@
                   </el-popover>
                 </template>
               </el-table-column>
+              <el-table-column label="操作" width="100">
+                <template slot-scope="scope">
+                  <el-button type="text" size="small" @click="deleteSelectTrainTicket(scope.row)">删除</el-button>
+                </template>
+              </el-table-column>
             </el-table>
           </div>
         </el-card>
@@ -323,6 +321,11 @@
                   >
                     <el-button slot="reference">退改签</el-button>
                   </el-popover>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" width="100">
+                <template slot-scope="scope">
+                  <el-button type="text" size="small" @click="deleteSelectHotel(scope.row)">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -1166,18 +1169,18 @@ export default {
               response.Data != undefined
             ) {
               if (response.Data > 0) {
-                this.$message("行程确认成功!");
+                this.$message.success("行程确认成功!");
                 this.ordertailVisible = false;
                 this.onQueryClick(1);
               } else {
-                this.$message(response.Message);
+                this.$message.error(response.Message);
               }
             } else {
-              this.$message(response.Message);
+              this.$message.error(response.Message);
             }
           },
           error => {
-            this.$message(error);
+            this.$message.error(error);
             console.log(error);
           }
         );
@@ -1271,6 +1274,141 @@ export default {
             console.log(error);
           }
         );
+    },
+    deleteSelectAirTicket(row) {
+      this.$confirm("此操作将永久删除该员工, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.$http
+            .post(
+              "/api/Boss/DeleteSelectAirTicket",
+              Service.Encrypt.DataEncryption({
+                SelectAirTicketId: row.SelectAirTicketId
+              })
+            )
+            .then(
+              response => {
+                if (
+                  response.Data &&
+                  response.Data != null &&
+                  response.Data != undefined
+                ) {
+                  if (response.Data > 0) {
+                    this.$message.success("删除成功!");
+                    this.getselectairlist();
+                  } else {
+                    this.$message(response.Message);
+                  }
+                } else {
+                  this.$message(response.Message);
+                }
+              },
+              error => {
+                this.$message(error);
+                console.log(error);
+              }
+            );
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
+    },
+    deleteSelectTrainTicket(row) {
+      this.$confirm("此操作将永久删除该员工, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.$http
+            .post(
+              "/api/Boss/DeleteSelectTrainTicket",
+              Service.Encrypt.DataEncryption({
+                SelectTrainTicketId: row.SelectTrainTicketId
+              })
+            )
+            .then(
+              response => {
+                if (
+                  response.Data &&
+                  response.Data != null &&
+                  response.Data != undefined
+                ) {
+                  if (response.Data > 0) {
+                    this.$message.success("删除成功!");
+                    this.getselecttrainlist();
+                  } else {
+                    this.$message(response.Message);
+                  }
+                } else {
+                  this.$message(response.Message);
+                }
+              },
+              error => {
+                this.$message(error);
+                console.log(error);
+              }
+            );
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
+    },
+    deleteSelectHotel(row) {
+      this.$confirm("此操作将永久删除该员工, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.$http
+            .post(
+              "/api/Boss/DeleteSelectHotel",
+              Service.Encrypt.DataEncryption({
+                SelectHotelId: row.SelectHotelId
+              })
+            )
+            .then(
+              response => {
+                if (
+                  response.Data &&
+                  response.Data != null &&
+                  response.Data != undefined
+                ) {
+                  if (response.Data > 0) {
+                    this.$message({
+                      type: "success",
+                      message: "删除成功!"
+                    });
+                    this.getselecthotellist();
+                  } else {
+                    this.$message(response.Message);
+                  }
+                } else {
+                  this.$message(response.Message);
+                }
+              },
+              error => {
+                this.$message(error);
+                console.log(error);
+              }
+            );
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
     }
   },
   mounted() {
@@ -1299,7 +1437,7 @@ export default {
   -ms-pointer-events: none;
   -o-pointer-events: none;
   pointer-events: none;
-  width:100%;
+  width: 100%;
 }
 .boxtail {
 }
