@@ -1425,21 +1425,17 @@ export default {
 }
 .box-move {
   position: fixed;
-  left: 0;
-  top: 0;
+  left: 3%;
+  top: 10%;
   right: 0;
   bottom: 0;
-  height: 50%;
+  height: 200px;
   z-index: 9999;
-  background: rgba(0, 0, 0, 0.3);
-  -webkit-pointer-events: none;
-  -moz-pointer-events: none;
-  -ms-pointer-events: none;
-  -o-pointer-events: none;
-  pointer-events: none;
-  width: 100%;
+  /* background: rgba(0, 0, 0, 0.3); */
+  width: 93%;
 }
 .boxtail {
+  padding-top: 12%;
 }
 
 .box-card {
