@@ -5,7 +5,7 @@
         <!-- <img src="../assets/logo.png" alt="" class="logo"> -->
       </div>
       <p class="text-tips">你好，欢迎登录</p>
-      <form action="" class="login-form">
+      <form action class="login-form">
         <div class="m-list-group">
           <div class="m-list-group-item">
             <input type="text" placeholder="用户名" class="m-input" v-model="username">
@@ -20,9 +20,11 @@
       <div style="margin-top: 50px"></div>
       <p class="text-tips">
         <i class="fa fa-meetup" style="color: #29ABE2"></i>&nbsp;
-        <span class="footer-text">{{appName}} &nbsp;
-          <el-tag size="mini">{{version}}</el-tag> <br>©make by
-       
+        <span class="footer-text">&nbsp;
+          <el-tag size="mini"></el-tag>
+          <br>
+
+          ©make by
         </span>
       </p>
     </div>
@@ -31,13 +33,14 @@
 <script>
 import { mapActions } from "vuex";
 import Service from "../_common";
+
 export default {
   name: "login",
   data() {
     return {
       username: "",
       password: "",
-      isLoging: false,
+      isLoging: false
       // author: window.APP_INFO.author,
       // version: window.APP_INFO.version,
       // appName: window.APP_INFO.appName
@@ -68,6 +71,11 @@ export default {
               if (response.Status == 100) {
                 response.Data.UserPwd = null;
                 this.login(response.Data).then(res => {
+                  Service.Util.SetLocalStorage(Service.Enum.CGT_ALI_USER, "");
+                  Service.Util.SetLocalStorage(
+                    Service.Enum.CGT_ALI_USER,
+                    JSON.stringify(response.Data)
+                  );
                   this.$message.success("登录成功");
                   this.$router.push({ name: "home" });
                 });

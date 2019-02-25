@@ -27,7 +27,8 @@ export default {
     return {
       menus,
       defaultActive: 'home',
-      test: 'asdfasdf'
+      test: 'asdfasdf',
+    
     }
   },
   watch: {
@@ -37,13 +38,14 @@ export default {
   },
   methods: {
     setCurrentRoute () {
-      // console.log(this.$route)
+      console.log(this.$route)
       this.defaultActive = this.$route.name
     }
   },
   created () {
     this.setCurrentRoute()
-  }
+  },
+ 
 }
 </script>
 <style type="text/css">

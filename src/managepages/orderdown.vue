@@ -39,9 +39,9 @@
             <el-tag type="success" v-if="scope.row.Status==5">已完成</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="100">
+        <el-table-column label="操作" fixed="right">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="onClickOrderDetail(scope.row)">订单详情</el-button>
+            <el-button type="text" size="small" @click="onClickOrderDetail(scope.row)">详情</el-button>
           </template>
         </el-table-column>
       </el-table>

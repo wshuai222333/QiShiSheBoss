@@ -3,7 +3,7 @@
 import Encrypt from "./encrypt.service";
 import Interceptor from "./interceptor.service";
 import Util from "./util.service";
-// import Enum from "./enum.service";
+import Enum from "./enum.service";
 // import Convert from "./convert.service"
 
 export default {
@@ -11,7 +11,7 @@ export default {
     // // Element,
     Encrypt,
     Interceptor,
-    Util
-    // Enum,
+    Util,
+    Enum,
     // Convert
 }
