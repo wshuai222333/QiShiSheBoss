@@ -132,7 +132,7 @@
 
         <p style="height:5px;"></p>
 
-        <!--火车票选择信息-->
+        <!--火车票信息-->
         <el-card class="box-card" style="width:100%">
           <div slot="header" class="clearfix">
             <span>火车票信息</span>
@@ -369,19 +369,19 @@
             <el-input v-model="airform.onefightno" auto-complete="off" placeholder="去程航班号"></el-input>
           </el-form-item>
           <el-form-item label="去程出发时间" :label-width="formLabelWidth">
-            <el-date-picker v-model="airform.onedepartdate" type="datetime" placeholder="去程出发时间"></el-date-picker>
+            <el-date-picker v-model="airform.onedepartdate" type="datetime" placeholder="去程出发时间" value-format="yyyy-MM-dd hh:mm:ss"></el-date-picker>
           </el-form-item>
           <el-form-item label="去程到达时间" :label-width="formLabelWidth">
-            <el-date-picker v-model="airform.onearrivedate" type="datetime" placeholder="去程到达时间"></el-date-picker>
+            <el-date-picker v-model="airform.onearrivedate" type="datetime" placeholder="去程到达时间" value-format="yyyy-MM-dd hh:mm:ss"></el-date-picker>
           </el-form-item>
           <el-form-item label="返程航班号" :label-width="formLabelWidth">
             <el-input v-model="airform.twofightno" auto-complete="off" placeholder="返程航班号"></el-input>
           </el-form-item>
           <el-form-item label="返程出发时间" :label-width="formLabelWidth">
-            <el-date-picker v-model="airform.twodepartdate" type="datetime" placeholder="返程出发时间"></el-date-picker>
+            <el-date-picker v-model="airform.twodepartdate" type="datetime" placeholder="返程出发时间" value-format="yyyy-MM-dd hh:mm:ss"></el-date-picker>
           </el-form-item>
           <el-form-item label="返程到达时间" :label-width="formLabelWidth">
-            <el-date-picker v-model="airform.twoarrivedate" type="datetime" placeholder="返程到达时间"></el-date-picker>
+            <el-date-picker v-model="airform.twoarrivedate" type="datetime" placeholder="返程到达时间" value-format="yyyy-MM-dd hh:mm:ss"></el-date-picker>
           </el-form-item>
           <el-form-item label="舱位类型" :label-width="formLabelWidth">
             <el-select v-model="airform.seattype" placeholder="请选择">
